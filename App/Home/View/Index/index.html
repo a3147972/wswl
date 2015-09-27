@@ -1,0 +1,849 @@
+
+    <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title>百科搜索，专业的本地商家搜索引擎</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/html.css?t=1443370433">
+    <link rel="stylesheet" href="__PUBLIC__/css/index.css?t=1443370433">
+    <script src="http://api.map.baidu.com/api?v=2.0&ak=Ce4fChQjNH7gqd7nMsXzC4fb" type="text/javascript"></script>
+    <script type="text/javascript" src="http://developer.baidu.com/map/custom/stylelist.js"></script>
+    <script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
+    <script src="__PUBLIC__/js/jquery.js" type="text/javascript"></script>
+    <script src="__PUBLIC__/js/weizhi.js" type="text/javascript"></script>
+    </head>
+    <body onload="seth();">
+    <script>
+        if(isWeiXin()){
+            //alert("您使用的是微信浏览器");
+            var pointType = 0;
+        }else{
+            //alert("您使用的不是微信浏览器");
+            var pointType = 0;
+        }
+    function isWeiXin(){
+    var ua = window.navigator.userAgent.toLowerCase();
+    if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+    return true;
+    }else{
+    return false;
+    }
+    }
+    function neihe() {
+        var ua = window.navigator.userAgent.toLowerCase();
+        if(ua.match(/qq/i)=='qq'){
+            //alert('是WebKit内');
+          return true;
+      }else{
+            //alert('不是WebKit内');
+      return false;
+      }
+    }
+    function seth(){
+        var h = $('#container').height();
+        var nh = parseInt(h)-80;
+        $('#container').css({'height':nh,'margin-top':'80px'});
+    }
+    </script>
+    <div class="banner" style="height:50px;position:fixed;top:0px;left:0px;width:100%;background:#222;z-index:666">
+    <img src="__PUBLIC__/img/more.gif" style="width:100%;height:50px;"/>
+    </div>
+    <style>
+    body{
+
+
+    }
+    .allicon{
+        margin-top:10px;
+        height:10px;
+        witdh:10px;
+    }
+
+    #backMy {
+      position: fixed;
+      bottom: 1px;
+      left: 4px;
+      padding: 0px;
+      margin: 0px;
+      font-size: 14px;
+      padding: 2px;
+    }
+    </style>
+    <div class="indexNav">
+    <table style="width:100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+
+            <td style="width:23%">
+            <button class="allShop"><font style="color:#333333"><b>全部</b></font> <img src="__PUBLIC__/img/DOWN.png" class="allicon"/></button>
+            </td>
+            <td style="width:1.5%"></td>
+            <td style="width:55%">
+    <div class="searchBox">
+        <input value="" name="suggestId"  id="suggestId" placeholder=" 请输入商家名称或关键词"/>
+        <button id="addressBtn" >搜索</button>
+        </div>
+    <div class="reslist" style="overflow-y: auto;max-height: 280px;display:none;"></div>
+    <script>
+    function setv(str,id){
+        $('input[name="suggestId"]').val(str);
+        $('.reslist').html('');
+        $('.reslist').hide();
+    }
+    document.onkeyup = function (e){
+        getv();
+       // e = e || event;
+       // if (e.keyCode == 13) {  //判断是否单击的enter按键(回车键)
+        // document.getElementByIdx_x_x("txtid").click();
+        // return false;
+          //}
+       }
+
+        function getv(){
+            var data = $('input[name="suggestId"]').val();
+            $.post(
+                'api/link.php',
+                {
+                    'data':data
+                },
+                function(res){
+                    $('.reslist').html(res);
+                    $('.reslist').show();
+                }
+            );
+        };
+    </script>
+    </td>
+    <td style="width:1.5%"></td>
+    <td style="width:19%">
+    <a href="{:U('Merchant/in')}"><button class="reg"><font style="color:#333333"><b>入驻</b></font></button></a>
+    </td>
+
+    </tr>
+
+    </table>
+
+    </div>
+
+    <div class="moreShop" style="display:none;">
+    <div class="view">
+        <ul class="m-list">
+        <volist name="class_list" id="class_vo">
+        <li><a href="{:U('index', array('class_id' => $class_vo['id']))}">{$class_vo['name']}<div class="sums">0</div></a></li>
+        </volist>
+        </ul>
+        </div>
+    </div>
+    <div id="container"></div>
+    <div id="searchResultPanel" style="position:fixed;z-index:999;padding-bottom:20px;width:250px; "></div>
+    <button id="backMy" onclick="blackT();">我的位置</button>
+    <!--底部弹窗-->
+    <div class="window_b">
+    <button class="closeBTN">X</button>
+    <div class="contents">
+    </div>
+    </div>
+
+    <script>
+    $(function(){
+        var j = 0;
+
+        $('.allShop').click(
+
+            function(){
+
+                $('.moreShop').slideToggle();
+                if(j == 0){
+                    $(this).html('<font style="color:#333333"><b>全部</b></font> <img src="__PUBLIC__/img/UP.png" class="allicon"/>');
+                    j = 1;
+                }else{
+                    $(this).html('<font style="color:#333333"><b>全部</b></font> <img src="__PUBLIC__/img/DOWN.png" class="allicon"/>');
+                    j = 0;
+                }
+                }
+            );
+            $('.moreShop').click(
+            function(){
+                $('.moreShop').slideToggle();
+                if(j == 0){
+                    $('.allShop').html('<font style="color:#69958c"><b>全部</b></font> <img src="__PUBLIC__/img/UP.png" class="allicon"/>');
+                    j = 1;
+                }else{
+                    $('.allShop').html('<font style="color:#a7a7a7"><b>全部</b></font> <img src="__PUBLIC__/img/DOWN.png" class="allicon"/>');
+                    j = 0;
+                }
+                }
+            );
+        $('#suggestId').dblclick(
+            function(){
+                $('.searchBox').hide();
+            }
+        );
+        $('#ser').click(
+            function(){
+                $('.searchBox').toggle();
+            }
+        );
+        $('#more').click(
+            function(){
+                $('.moreBox').toggle();
+            }
+        );
+        $('#moreClose').click(
+            function(){
+                $('.moreBox').toggle();
+            }
+        );
+
+    });
+    if (window.navigator.geolocation){
+    var options = {
+    enableHighAccuracy: true,
+    };
+    window.navigator.geolocation.getCurrentPosition(handleSuccess, handleError, options);
+
+    }else{
+    alert("浏览器不支持html5来获取地理位置信息");
+
+    }
+    function handleSuccess(position){
+
+
+    var opts = {anchor: BMAP_ANCHOR_BOTTOM_RIGHT}
+    var lng = position.coords.longitude;
+    var lat = position.coords.latitude;
+    var map = new BMap.Map("container",{minZoom:4,maxZoom:18});
+
+    //var map = new BMap.Map("container");
+        window.map = map;
+    var ggPoint = new BMap.Point(lng, lat);
+
+    var myIcon = new BMap.Icon("__PUBLIC__/img/i.png", new BMap.Size(23, 25), {
+    offset: new BMap.Size(10, 15),
+
+    imageOffset: new BMap.Size(0,0)
+    });
+
+    var rIcon1 = new BMap.Icon("__PUBLIC__/img/icon/11.png", new BMap.Size(23, 25), {
+    offset: new BMap.Size(10, 15),
+    imageOffset: new BMap.Size(0,0)
+    });
+
+    var rIcon2 = new BMap.Icon("__PUBLIC__/img/icon/12.png", new BMap.Size(23, 25), {
+    offset: new BMap.Size(10, 15),
+    imageOffset: new BMap.Size(0,0)
+    });
+    var rIcon3 = new BMap.Icon("__PUBLIC__/img/icon/13.png", new BMap.Size(23, 25), {
+    offset: new BMap.Size(10, 15),
+    imageOffset: new BMap.Size(0,0)
+    });
+    var rIcon4 = new BMap.Icon("__PUBLIC__/img/icon/14.png", new BMap.Size(23, 25), {
+    offset: new BMap.Size(10, 15),
+    imageOffset: new BMap.Size(0,0)
+    });
+    var rIcon5 = new BMap.Icon("__PUBLIC__/img/icon/15.png", new BMap.Size(23, 25), {
+    offset: new BMap.Size(10, 15),
+    imageOffset: new BMap.Size(0,0)
+    });
+
+
+
+    var rIcon = new BMap.Icon("__PUBLIC__/img/red.png", new BMap.Size(23, 25), {
+    offset: new BMap.Size(10, 15),
+    imageOffset: new BMap.Size(0,0)
+    });
+
+
+
+    BMap.Convertor.translate(ggPoint, pointType, function(point){
+    var style = [
+            {
+                    "featureType": "poi",
+                    "elementType": "all",
+                    "stylers": {
+                    "visibility": "off"
+                    }
+            }
+    ]
+
+    map.setMapStyle({
+      styleJson:style
+    });
+
+    var opts = {type: BMAP_NAVIGATION_CONTROL_LARGE}
+    map.addControl(new BMap.NavigationControl(opts));
+    map.addControl(new BMap.ScaleControl());
+    map.centerAndZoom(point, 18);
+
+
+    /*
+    定位当前位置
+    */
+    var marker = new BMap.Marker(point,{icon: myIcon});
+    map.addOverlay(marker);
+    marker.enableDragging();
+    var geoc = new BMap.Geocoder();
+
+    /*
+    为当前位置点击添加监听
+    */
+    marker.addEventListener("click", function(e){
+    var center = map.getCenter();
+    if(docs.css('display')=='none')
+    {
+    $('.contents').html('信息正在加载中...');
+    var p = e.target;
+    var pt = p.getPosition();
+    geoc.getLocation(pt, function(rs){
+    var addComp = rs.addressComponents;
+    var htmlcontent = addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber;
+    var htmli = myHtml(htmlcontent);
+    $('.contents').html(htmli);
+    });
+
+
+    docs.css({'display':'inline'});
+    }else{
+    docs.css({'display':'none'});
+    }
+    //操作结束
+    });
+
+
+
+    var docs = $('.window_b');
+    //从服务器获取商家的点
+    var marker88 = new BMap.Marker(new BMap.Point(115.979782, 39.485926),{icon: rIcon});
+    map.addOverlay(marker88);
+    marker88.addEventListener("click", function(){
+    //var center = map.getCenter();
+
+    if(docs.css('display')=='none')
+    {
+    $('.contents').html('信息正在加载中...');
+    docs.css({'display':'inline'});
+    }else{
+    docs.css({'display':'none'});
+    }
+    eval("getInfo(\'88\')");
+    //操作结束
+    });
+
+    var label88 = new BMap.Label('乖乖的',{offset:new BMap.Size(20,-0)});
+                label88.setStyle({
+                    color : "#222",
+                    fontSize : "12px",
+                    height : "20px",
+                    lineHeight : "20px",
+                    fontFamily:"微软雅黑",
+                    borderStyle:"solid",
+                    borderColor:'#fff',
+                    textAlign:'center',
+                    borderSize:'0px',
+                    padding:'0',
+                    margin:'0',
+                    width:'auto'
+                });
+                marker88.setLabel(label88);
+
+    var marker87 = new BMap.Marker(new BMap.Point(115.972406, 39.488313),{icon: rIcon});
+    map.addOverlay(marker87);
+    marker87.addEventListener("click", function(){
+    //var center = map.getCenter();
+
+    if(docs.css('display')=='none')
+    {
+    $('.contents').html('信息正在加载中...');
+    docs.css({'display':'inline'});
+    }else{
+    docs.css({'display':'none'});
+    }
+    eval("getInfo(\'87\')");
+    //操作结束
+    });
+
+    var label87 = new BMap.Label('这方面的步伐',{offset:new BMap.Size(20,-0)});
+                label87.setStyle({
+                    color : "#222",
+                    fontSize : "12px",
+                    height : "20px",
+                    lineHeight : "20px",
+                    fontFamily:"微软雅黑",
+                    borderStyle:"solid",
+                    borderColor:'#fff',
+                    textAlign:'center',
+                    borderSize:'0px',
+                    padding:'0',
+                    margin:'0',
+                    width:'auto'
+                });
+                marker87.setLabel(label87);
+
+    var marker86 = new BMap.Marker(new BMap.Point(115.97856250000001, 39.4828035),{icon: rIcon});
+    map.addOverlay(marker86);
+    marker86.addEventListener("click", function(){
+    //var center = map.getCenter();
+
+    if(docs.css('display')=='none')
+    {
+    $('.contents').html('信息正在加载中...');
+    docs.css({'display':'inline'});
+    }else{
+    docs.css({'display':'none'});
+    }
+    eval("getInfo(\'86\')");
+    //操作结束
+    });
+
+    var label86 = new BMap.Label('个百分百度',{offset:new BMap.Size(20,-0)});
+                label86.setStyle({
+                    color : "#222",
+                    fontSize : "12px",
+                    height : "20px",
+                    lineHeight : "20px",
+                    fontFamily:"微软雅黑",
+                    borderStyle:"solid",
+                    borderColor:'#fff',
+                    textAlign:'center',
+                    borderSize:'0px',
+                    padding:'0',
+                    margin:'0',
+                    width:'auto'
+                });
+                marker86.setLabel(label86);
+
+    var marker83 = new BMap.Marker(new BMap.Point(115.979262, 39.4836005),{icon: rIcon});
+    map.addOverlay(marker83);
+    marker83.addEventListener("click", function(){
+    //var center = map.getCenter();
+
+    if(docs.css('display')=='none')
+    {
+    $('.contents').html('信息正在加载中...');
+    docs.css({'display':'inline'});
+    }else{
+    docs.css({'display':'none'});
+    }
+    eval("getInfo(\'83\')");
+    //操作结束
+    });
+
+    var label83 = new BMap.Label('大家新年到',{offset:new BMap.Size(20,-0)});
+                label83.setStyle({
+                    color : "#222",
+                    fontSize : "12px",
+                    height : "20px",
+                    lineHeight : "20px",
+                    fontFamily:"微软雅黑",
+                    borderStyle:"solid",
+                    borderColor:'#fff',
+                    textAlign:'center',
+                    borderSize:'0px',
+                    padding:'0',
+                    margin:'0',
+                    width:'auto'
+                });
+                marker83.setLabel(label83);
+
+    var marker82 = new BMap.Marker(new BMap.Point(115.979062, 39.483383),{icon: rIcon});
+    map.addOverlay(marker82);
+    marker82.addEventListener("click", function(){
+    //var center = map.getCenter();
+
+    if(docs.css('display')=='none')
+    {
+    $('.contents').html('信息正在加载中...');
+    docs.css({'display':'inline'});
+    }else{
+    docs.css({'display':'none'});
+    }
+    eval("getInfo(\'82\')");
+    //操作结束
+    });
+
+    var label82 = new BMap.Label('你发给你拿点',{offset:new BMap.Size(20,-0)});
+                label82.setStyle({
+                    color : "#222",
+                    fontSize : "12px",
+                    height : "20px",
+                    lineHeight : "20px",
+                    fontFamily:"微软雅黑",
+                    borderStyle:"solid",
+                    borderColor:'#fff',
+                    textAlign:'center',
+                    borderSize:'0px',
+                    padding:'0',
+                    margin:'0',
+                    width:'auto'
+                });
+                marker82.setLabel(label82);
+
+    var marker81 = new BMap.Marker(new BMap.Point(115.979062, 39.483383),{icon: rIcon});
+    map.addOverlay(marker81);
+    marker81.addEventListener("click", function(){
+    //var center = map.getCenter();
+
+    if(docs.css('display')=='none')
+    {
+    $('.contents').html('信息正在加载中...');
+    docs.css({'display':'inline'});
+    }else{
+    docs.css({'display':'none'});
+    }
+    eval("getInfo(\'81\')");
+    //操作结束
+    });
+
+    var label81 = new BMap.Label('姐姐好吧',{offset:new BMap.Size(20,-0)});
+                label81.setStyle({
+                    color : "#222",
+                    fontSize : "12px",
+                    height : "20px",
+                    lineHeight : "20px",
+                    fontFamily:"微软雅黑",
+                    borderStyle:"solid",
+                    borderColor:'#fff',
+                    textAlign:'center',
+                    borderSize:'0px',
+                    padding:'0',
+                    margin:'0',
+                    width:'auto'
+                });
+                marker81.setLabel(label81);
+
+    var marker79 = new BMap.Marker(new BMap.Point(115.97175250000001, 39.4907915),{icon: rIcon});
+    map.addOverlay(marker79);
+    marker79.addEventListener("click", function(){
+    //var center = map.getCenter();
+
+    if(docs.css('display')=='none')
+    {
+    $('.contents').html('信息正在加载中...');
+    docs.css({'display':'inline'});
+    }else{
+    docs.css({'display':'none'});
+    }
+    eval("getInfo(\'79\')");
+    //操作结束
+    });
+
+    var label79 = new BMap.Label('大家觉得',{offset:new BMap.Size(20,-0)});
+                label79.setStyle({
+                    color : "#222",
+                    fontSize : "12px",
+                    height : "20px",
+                    lineHeight : "20px",
+                    fontFamily:"微软雅黑",
+                    borderStyle:"solid",
+                    borderColor:'#fff',
+                    textAlign:'center',
+                    borderSize:'0px',
+                    padding:'0',
+                    margin:'0',
+                    width:'auto'
+                });
+                marker79.setLabel(label79);
+
+    var marker78 = new BMap.Marker(new BMap.Point(115.97178650000001, 39.4909675),{icon: rIcon});
+    map.addOverlay(marker78);
+    marker78.addEventListener("click", function(){
+    //var center = map.getCenter();
+
+    if(docs.css('display')=='none')
+    {
+    $('.contents').html('信息正在加载中...');
+    docs.css({'display':'inline'});
+    }else{
+    docs.css({'display':'none'});
+    }
+    eval("getInfo(\'78\')");
+    //操作结束
+    });
+
+    var label78 = new BMap.Label('华谊楼',{offset:new BMap.Size(20,-0)});
+                label78.setStyle({
+                    color : "#222",
+                    fontSize : "12px",
+                    height : "20px",
+                    lineHeight : "20px",
+                    fontFamily:"微软雅黑",
+                    borderStyle:"solid",
+                    borderColor:'#fff',
+                    textAlign:'center',
+                    borderSize:'0px',
+                    padding:'0',
+                    margin:'0',
+                    width:'auto'
+                });
+                marker78.setLabel(label78);
+
+    var marker77 = new BMap.Marker(new BMap.Point(115.97178650000001, 39.4909675),{icon: rIcon});
+    map.addOverlay(marker77);
+    marker77.addEventListener("click", function(){
+    //var center = map.getCenter();
+
+    if(docs.css('display')=='none')
+    {
+    $('.contents').html('信息正在加载中...');
+    docs.css({'display':'inline'});
+    }else{
+    docs.css({'display':'none'});
+    }
+    eval("getInfo(\'77\')");
+    //操作结束
+    });
+
+    var label77 = new BMap.Label('华谊楼',{offset:new BMap.Size(20,-0)});
+                label77.setStyle({
+                    color : "#222",
+                    fontSize : "12px",
+                    height : "20px",
+                    lineHeight : "20px",
+                    fontFamily:"微软雅黑",
+                    borderStyle:"solid",
+                    borderColor:'#fff',
+                    textAlign:'center',
+                    borderSize:'0px',
+                    padding:'0',
+                    margin:'0',
+                    width:'auto'
+                });
+                marker77.setLabel(label77);
+
+    var marker74 = new BMap.Marker(new BMap.Point(113.2820505, 23.113856),{icon: rIcon});
+    map.addOverlay(marker74);
+    marker74.addEventListener("click", function(){
+    //var center = map.getCenter();
+
+    if(docs.css('display')=='none')
+    {
+    $('.contents').html('信息正在加载中...');
+    docs.css({'display':'inline'});
+    }else{
+    docs.css({'display':'none'});
+    }
+    eval("getInfo(\'74\')");
+    //操作结束
+    });
+
+    var label74 = new BMap.Label('你好',{offset:new BMap.Size(20,-0)});
+                label74.setStyle({
+                    color : "#222",
+                    fontSize : "12px",
+                    height : "20px",
+                    lineHeight : "20px",
+                    fontFamily:"微软雅黑",
+                    borderStyle:"solid",
+                    borderColor:'#fff',
+                    textAlign:'center',
+                    borderSize:'0px',
+                    padding:'0',
+                    margin:'0',
+                    width:'auto'
+                });
+                marker74.setLabel(label74);
+
+    var marker73 = new BMap.Marker(new BMap.Point(115.982729, 39.4885515),{icon: rIcon});
+    map.addOverlay(marker73);
+    marker73.addEventListener("click", function(){
+    //var center = map.getCenter();
+
+    if(docs.css('display')=='none')
+    {
+    $('.contents').html('信息正在加载中...');
+    docs.css({'display':'inline'});
+    }else{
+    docs.css({'display':'none'});
+    }
+    eval("getInfo(\'73\')");
+    //操作结束
+    });
+
+    var label73 = new BMap.Label('餐馆',{offset:new BMap.Size(20,-0)});
+                label73.setStyle({
+                    color : "#222",
+                    fontSize : "12px",
+                    height : "20px",
+                    lineHeight : "20px",
+                    fontFamily:"微软雅黑",
+                    borderStyle:"solid",
+                    borderColor:'#fff',
+                    textAlign:'center',
+                    borderSize:'0px',
+                    padding:'0',
+                    margin:'0',
+                    width:'auto'
+                });
+                marker73.setLabel(label73);
+
+    var marker72 = new BMap.Marker(new BMap.Point(115.982076, 39.4865735),{icon: rIcon3});
+    map.addOverlay(marker72);
+    marker72.addEventListener("click", function(){
+    //var center = map.getCenter();
+
+    if(docs.css('display')=='none')
+    {
+    $('.contents').html('信息正在加载中...');
+    docs.css({'display':'inline'});
+    }else{
+    docs.css({'display':'none'});
+    }
+    eval("getInfo(\'72\')");
+    //操作结束
+    });
+
+    var label72 = new BMap.Label('网尚网络2',{offset:new BMap.Size(20,-0)});
+                label72.setStyle({
+                    color : "#222",
+                    fontSize : "12px",
+                    height : "20px",
+                    lineHeight : "20px",
+                    fontFamily:"微软雅黑",
+                    borderStyle:"solid",
+                    borderColor:'#fff',
+                    textAlign:'center',
+                    borderSize:'0px',
+                    padding:'0',
+                    margin:'0',
+                    width:'auto'
+                });
+                marker72.setLabel(label72);
+
+    var marker70 = new BMap.Marker(new BMap.Point(115.9760265, 39.4908075),{icon: rIcon});
+    map.addOverlay(marker70);
+    marker70.addEventListener("click", function(){
+    //var center = map.getCenter();
+
+    if(docs.css('display')=='none')
+    {
+    $('.contents').html('信息正在加载中...');
+    docs.css({'display':'inline'});
+    }else{
+    docs.css({'display':'none'});
+    }
+    eval("getInfo(\'70\')");
+    //操作结束
+    });
+
+    var label70 = new BMap.Label('网尚网络1',{offset:new BMap.Size(20,-0)});
+                label70.setStyle({
+                    color : "#222",
+                    fontSize : "12px",
+                    height : "20px",
+                    lineHeight : "20px",
+                    fontFamily:"微软雅黑",
+                    borderStyle:"solid",
+                    borderColor:'#fff',
+                    textAlign:'center',
+                    borderSize:'0px',
+                    padding:'0',
+                    margin:'0',
+                    width:'auto'
+                });
+                marker70.setLabel(label70);
+
+
+
+    var cvars = '涿州市';
+    function myFun2(result){
+    var cityName = result.name;
+    //alert(cityName);
+    //map.setCenter(cityName);
+    cvars = cityName;
+    }
+    var myCity = new BMap.LocalCity();
+    myCity.get(myFun2);
+
+    //返回中心的
+    var btn = document.getElementById("backMy");
+    //addEventListener：绑定函数
+    btn.addEventListener("click",
+    function(){
+    map.panTo(point)
+    }
+    );
+
+
+    var btns = document.getElementById("addressBtn");
+
+    btns.addEventListener("click",function(){
+    var vv  = document.getElementById("suggestId").value;
+    if(vv == ''){
+        alert('请输入要搜索的值');
+    }else{
+        $.post(
+        'index.php',
+        {
+            keywords:vv
+        },
+        function(i){
+            if(i.status == 0){
+                alert('没有搜到到结果');
+            }else{
+                var gg= new Array(); //定义一数组
+                gg = i.info.split("|");
+                eval('var points = new BMap.Point('+gg[0]+');');
+                map.panTo(points);
+                eval('marker'+gg[2]+'.setAnimation(BMAP_ANIMATION_BOUNCE);');
+            }
+        });
+    }
+    });
+
+    });
+
+    var opts = {type: BMAP_NAVIGATION_CONTROL_LARGE}
+    map.addControl(new BMap.NavigationControl(opts));
+    map.addControl(new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT}));
+
+    map.disable3DBuilding();
+    }
+    function getInfo(ids){
+    $.ajax({
+    type:'POST',
+    data:{id:ids},
+    url: '/api/get.php',
+    success: function(data) {
+    $('.contents').html(data);
+    }
+    });
+    }
+
+    function myHtml(a){
+    var str = '<div class="title" style="text-align:center"><font class="title_left" style="text-align:center;margin:0px;">我的位置信息</font></div>'
+    +
+    '<div class="contentBox">'
+    +
+    a
+    +
+    '<div class="line"></div>'
+    +
+    '</div>';
+    return str;
+    }
+
+    function handleError(error){
+    var map = new BMap.Map("container");
+    var point = new BMap.Point(116.331398,39.897445);
+    map.centerAndZoom(point,16);
+    function myFun(result){
+    var cityName = result.name;
+    map.setCenter(cityName);
+
+    }
+    var myCity = new BMap.LocalCity();
+    myCity.get(myFun);
+    }
+    $(function(){
+    $('.closeBTN').click(
+    function(){
+    $('.window_b').css({'display':'none'});
+    }
+    );
+    });
+
+
+    </script>
+    <div style="display:none"><script language="javascript" type="text/javascript" src="http://js.users.51.la/18190640.js"></script></div></body>
+    </html>

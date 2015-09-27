@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>百度地图LBS定位</title>
+    <script type="text/javascript" src="{:C('baidu_js_path')}&ak={:C('baidu_ak')}"></script>
+    <script type="text/javascript" src="__PUBLIC__/assets/js/libs/jquery-1.10.2.min.js">
+    </script>
+    <script type="text/javascript" src="__PUBLIC__/plugins/dialog-plus-min.js">
+    </script>
+</head>
+<body>
+    <span> </span>
+    <p>当前坐标: <span id="position"></span> <input type="submit" value="确定" id="submit"></p>
+    <div style="width:800px;height:400px;border:#ccc solid 1px;" id="dituContent"></div>
+    <script>
+        //初始化百度地图
+        var map = new BMap.Map("dituContent");
+        var point = new BMap.Point(116.415911,39.909798);
+        map.centerAndZoom(point,17);
+        map.enableScrollWheelZoom();
+
+        //添加控件
+        map.addControl(new BMap.ScaleControl());
+        map.addControl(new BMap.NavigationControl());
+
+        //定位
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function(r){
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+            var mk = new BMap.Marker(r.point);
+                map.addOverlay(mk);
+                map.panTo(r.point);
+                $('#position').html(r.point.lng + "," + r.point.lat);
+            } else {
+                alert('定位失败');
+            }
+        })
+        //取坐标
+        map.addEventListener("click",function(e){
+            $('#position').html(e.point.lng + "," + e.point.lat);
+        });
+        $('#submit').click(function(){
+            var val = $('#position').html();
+            if (val == '') {
+                alert('请选择坐标');
+                return false;
+            }
+            $('#coordinate', window.parent.document).val(val);
+            $('.ui-dialog-close', window.parent.document).trigger('click');
+        })
+    </script>
+</body>
+</html>

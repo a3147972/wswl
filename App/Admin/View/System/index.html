@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <title>{:C('ADMIN_TITLE')}</title>
+    <include file="Public/style" />
+  </head>
+
+  <body>
+    <include file="Public/header" />
+    <div id="container">
+      <include file="Public/menu" />
+      <div id="content">
+        <div class="container">
+          <div class="crumbs">
+            <ul id="breadcrumbs" class="breadcrumb">
+              <li>
+                <i class="icon-home">
+                </i>
+                <a href="{:U('Index/index')}">
+                  后台首页
+                </a>
+              </li>
+              <li class="current">
+                <a href="{:U('System/index')}" title="">
+                  系统设置
+                </a>
+              </li>
+              <li class="current">
+                  <a href="__SELF__" title="">
+                   基本设置
+                  </a>
+              </li>
+            </ul>
+          </div>
+          <div class="page-header">
+            <div class="page-title">
+              <h3>
+                基本设置
+              </h3>
+            </div>
+          </div>
+          <div class="row row-bg">
+
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="widget box">
+                <div class="widget-content">
+                  <form class="form-horizontal row-border ajaxForm" action="{:U('saveConfig')}" method="post" onsubmit="return ajaxForm(this)">
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">
+                       网站名称:
+                      </label>
+                      <div class="col-md-10">
+                        <input type="text" name="site_title" class="form-control" placeholder="网站名称" value="{:C('site_title')}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">
+                       百度地图AK:
+                      </label>
+                      <div class="col-md-10">
+                        <input type="text" name="baidu_ak" class="form-control" placeholder="百度应用AK" value="{:C('baidu_ak')}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">
+                       百度地图js文件路径:
+                      </label>
+                      <div class="col-md-10">
+                        <input type="text" name="baidu_js_path" class="form-control" placeholder="百度应用AK" value="{:C('baidu_js_path')}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                    <label for="" class="col-md-2"></label>
+                    <div class="col-md-10">
+                      <input type="submit" value="提交" class="btn btn-lg btn-success">
+                    </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <include file="Public/script" />
+    <include file="Public/footer" />
+  </body>
+</html>

@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <title>{:C('ADMIN_TITLE')}</title>
+    <include file="Public/style" />
+  </head>
+
+  <body>
+    <include file="Public/header" />
+    <div id="container">
+      <include file="Public/menu" />
+      <div id="content">
+        <div class="container">
+          <div class="crumbs">
+            <ul id="breadcrumbs" class="breadcrumb">
+              <li>
+                <i class="icon-home">
+                </i>
+                <a href="{:U('Index/index')}">
+                  后台首页
+                </a>
+              </li>
+              <li class="current">
+                <a href="{:U('Merchant/index')}" title="">
+                  商户列表
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="page-header">
+            <div class="page-title">
+              <h3>
+                商户列表
+              </h3>
+            </div>
+          </div>
+          <div class="row row-bg">
+
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="btn-toolbar btn-toolbar-demo">
+                <a href="{:U('add')}" class="btn btn-lg btn-primary">新增</a>
+              </div>
+              <div class="widget box">
+                <div class="widget-header">
+                  <h4>商户列表</h4>
+                </div>
+                <div class="widget-content">
+                  <table class="table table-hover table-striped table-bordered table-highlight-head">
+                    <thead>
+                      <tr>
+                        <th>
+                          ID
+                        </th>
+                        <th>
+                          商户名称
+                        </th>
+                        <th>
+                          联系人
+                        </th>
+                        <th>联系电话</th>
+                        <th>坐标</th>
+                        <th>地址</th>
+                        <th>授权开始时间</th>
+                        <th>授权结束时间</th>
+                        <th>点赞数</th>
+                        <th>状态</th>
+                        <th>
+                          申请时间
+                        </th>
+                        <th>
+                          操作
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <volist name="list" id="vo">
+                        <tr>
+                        <td>
+                          {$vo.id}
+                        </td>
+                        <td>
+                          {$vo.name}
+                        </td>
+                        <td>{$vo.contact}</td>
+                        <td>{$vo.phone}</td>
+                        <td>{$vo.coordinate}</td>
+                        <td>{$vo.address}</td>
+                        <td>{$vo.authorization_start_time}</td>
+                        <td>{$vo.authorization_end_time}</td>
+                        <td>{$vo.good_number}</td>
+                        <td>
+                        <switch name="vo.audit_status">
+                          <case value="1">审核通过</case>
+                          <case value="0">待审核</case>
+                          <case value="-1">审核驳回</case>
+                        </switch></td>
+                        <td>
+                          {$vo.ctime}
+                        </td>
+                        <td>
+                          <a href="{:U('edit', array('id' => $vo['id']))}">编辑</a>
+                          <a href="{:U('del', array('id' => $vo['id']))}" onclick="return confirmDialog('您确定删除么?', this.href)">删除</a>
+                          <eq name="vo.audit_status" value="0">
+                            <a href="{:U('audit_status', array('id' => $vo['id'], 'audit_status'=>1))}" onclick="return confirmDialog('您确定通过申请么?', this.href)">审核通过</a>
+                          <a href="{:U('audit_status', array('id' => $vo['id'], 'audit_status'=>-1))}" onclick="return confirmDialog('您确定驳回申请么?', this.href)">审核驳回</a>
+                          </eq>
+                        </td>
+                      </tr>
+                      </volist>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="row">
+                    <div class="table-footer">
+                      <div class="col-md-6"></div>
+                      <div class="col-md-6">
+                        <ul class="pagination">
+                        <volist name="page_list" id="page_vo">
+                          <switch name="page_vo.name">
+                            <case value="prev">
+                              <eq name="page_vo.status" value="disabled">
+                                <li class="disabled">
+                                  <a href="{:U($page_vo['url'])}">
+                                    ← Prev
+                                  </a>
+                                </li>
+                              <else />
+                                <li>
+                                  <a href="{:U($page_vo['url'])}">
+                                    ← Prev
+                                  </a>
+                                </li>
+                              </eq>
+                            </case>
+                            <case value="list">
+                              <eq name="page_vo.status" value="disabled">
+                                <li class="disabled">
+                                  <a href="{:U($page_vo['url'])}">
+                                    {$page_vo.page}
+                                  </a>
+                                </li>
+                              <else />
+                                <li>
+                                  <a href="{:U($page_vo['url'])}">
+                                    {$page_vo.page}
+                                  </a>
+                                </li>
+                              </eq>
+                            </case>
+                            <case value="next">
+                              <eq name="page_vo.status" value="disabled">
+                                <li class="disabled">
+                                  <a href="{:U($page_vo['url'])}">
+                                    Next →
+                                  </a>
+                                </li>
+                              <else />
+                                <li>
+                                  <a href="{:U($page_vo['url'])}">
+                                    Next →
+                                  </a>
+                                </li>
+                              </eq>
+                            </case>
+                          </switch>
+                        </volist>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <include file="Public/script" />
+    <include file="Public/footer" />
+  </body>
+</html>

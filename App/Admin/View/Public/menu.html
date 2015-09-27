@@ -1,0 +1,91 @@
+<div id="sidebar" class="sidebar-fixed">
+        <div id="sidebar-content">
+          <ul id="nav">
+            <li class="current">
+              <a href="{:U('Index/index')}">
+                <i class="icon-dashboard">
+                </i>
+                后台首页
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0);">
+                <i class="icon-desktop">
+                </i>
+               商户管理
+              </a>
+              <ul class="sub-menu">
+                <li>
+                  <a href="{:U('MerchantClass/index')}">
+                    <i class="icon-angle-right">
+                    </i>
+                    商户分类列表
+                  </a>
+                </li>
+                <li>
+                  <a href="{:U('Merchant/index')}">
+                    <i class="icon-angle-right">
+                    </i>
+                    商户列表
+                  </a>
+                </li>
+                <li>
+                  <a href="{:U('Merchant/index', array('audit_status' => 0))}">
+                    <i class="icon-angle-right">
+                    </i>
+                    待审核商户列表
+                  </a>
+                </li>
+                <li>
+                  <a href="{:U('Merchant/index', array('overdue' => 1))}">
+                    <i class="icon-angle-right">
+                    </i>
+                    过期商户
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="javascript:void(0);">
+                <i class="icon-edit">
+                </i>
+               系统设置
+              </a>
+              <ul class="sub-menu">
+                <li>
+                  <a href="{:U('System/index')}">
+                    <i class="icon-angle-right">
+                    </i>
+                    基本设置
+                  </a>
+                </li>
+                <li>
+                  <a href="{:U('Admin/index')}">
+                    <i class="icon-angle-right">
+                    </i>
+                    管理员管理
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <div class="sidebar-widget align-center">
+            <div class="btn-group" data-toggle="buttons" id="theme-switcher">
+              <label class="btn active">
+                <input type="radio" name="theme-switcher" data-theme="bright">
+                <i class="icon-sun">
+                </i>
+                白天
+              </label>
+              <label class="btn">
+                <input type="radio" name="theme-switcher" data-theme="dark">
+                <i class="icon-moon">
+                </i>
+                夜晚
+              </label>
+            </div>
+          </div>
+        </div>
+        <div id="divider" class="resizeable">
+        </div>
+      </div>
