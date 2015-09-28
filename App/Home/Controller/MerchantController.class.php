@@ -37,7 +37,7 @@ class MerchantController extends BaseController
 
         if ($merchant_id !== false && $insert_img !== false) {
             $model->commit();
-            $this->success('新增成功', U('Merchant/index'));
+            $this->success('新增成功', U('Index/index'));
         } else {
             $model->rollback();
             $this->error('新增失败');

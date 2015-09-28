@@ -231,6 +231,7 @@ function getObjectURL(file) {
         success :function (i) {
             if (i.status == 1) {
                 alert('申请成功');
+                window.location.href = i.url;
             } else {
                 alert(i.info);
             }
