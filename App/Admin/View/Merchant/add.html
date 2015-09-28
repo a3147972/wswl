@@ -181,7 +181,7 @@
                           <volist name="img_list" id="img_vo">
                             <li>
                               <img src="{$img_vo.path|ImgReviewPath}" alt="" width="110px" height="110px">
-                              <p><a href="{:U('MerchantImg/del', array('id' => $img_vo['id']))}" onclick="return delMerchantImg('您确定删除么?', this.href)">删除</a></p>
+                              <p><a href="{:U('MerchantImg/del', array('id' => $img_vo['id']))}" onclick="return delMerchantImg(this, '您确定删除么?', this.href)">删除</a></p>
                             </li>
                           </volist>
                         </ul>
@@ -235,13 +235,16 @@
         });
         d.showModal();
       })
-
-      function delMerchantImg(dom, url, title){
+    })
+    function delMerchantImg(dom,info, url, title){
         if (title == '') {
             title = '发生错误了';
         }
         var path = $(dom).parents('p').siblings('img').attr('src');
-        alert(path);return false;
+        var parentLi = $(dom).parents('li');
+        var imgData = $('#imgData');
+        var imgDataText = imgData.val();
+
         var d = dialog({
             title : title,
             content : info,
@@ -252,6 +255,8 @@
                     dataType : 'json',
                     success : function (i) {
                         if (i.status == 1) {
+                            parentLi.remove();
+                            imgData.val(imgDataText.replace(i.info + '|', ''));
                         } else {
                             alertDialog(i.info);
                         }
@@ -264,7 +269,6 @@
         d.showModal();
         return false;
       }
-    })
     </script>
   </body>
 </html>

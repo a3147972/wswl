@@ -5,24 +5,21 @@ use Admin\Controller\BaseController;
 
 class MerchantImgController extends BaseController
 {
-    public function delAll()
+
+    public function del()
     {
-        $imgData = I('post.imgData');
-        if (empty($imgData)) {
-            $this->error('没有要删除的数据');
-        }
+        $model = D('MerchantImg');
+        $id = I('id');
+        $map['id'] = $id;
 
-        $imgData = explode('|', $imgData);
-        $imgData = array_filter($imgData);
+        $info = $model->_get($map);
 
-        $map['path'] = array('in', $imgData);
-
-        $result = D('MerchantImg')->where($map)->delete();
+        $result = $model->where($map)->delete();
 
         if ($result) {
-            $this->success('清空成功');
+            $this->success($info['path']);
         } else {
-            $this->error('清空失败');
+            $this->error('删除失败');
         }
     }
 }

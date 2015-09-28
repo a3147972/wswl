@@ -41,7 +41,7 @@ class MerchantImgModel extends BaseModel
      * @return bool         成功返回true,失败返回false
      */
     public function update($imgData, $merchant_id) {
-        $map['id'] = $merchant_id;
+        $map['merchant_id'] = $merchant_id;
         $map['path'] = array('in', $imgData);
 
         $list = $this->_list($map);

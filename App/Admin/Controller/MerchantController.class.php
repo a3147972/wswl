@@ -98,8 +98,10 @@ class MerchantController extends BaseController
         $update_img_result = D('MerchantImg')->update($imgData, $merchant_id);
 
         if ($update_result !== false && $update_img_result !== false) {
+            $model->commit();
             $this->success('操作成功', U('Merchant/index'));
         } else {
+            $model->rollback();
             $this->error('操作失败');
         }
     }
