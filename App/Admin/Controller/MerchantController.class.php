@@ -21,6 +21,8 @@ class MerchantController extends BaseController
     }
     public function _before_add()
     {
+        //icon_list
+        $this->assign('icon_list', C('ICON_LIST'));
         $class_list = D('MerchantClass')->_list();
         $this->assign('class_list', $class_list);
     }

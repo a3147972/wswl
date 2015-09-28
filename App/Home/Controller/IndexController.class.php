@@ -47,6 +47,9 @@ class IndexController extends BaseController
         $info = D('Merchant')->_get($map);
 
         if ($info) {
+            $img_list = D('MerchantImg')->_list(array('merchant_id'=>$id));
+            $img_list = array_column($img_list, 'path');
+            $info['img_list'] = $img_list;
             $this->success($info);
         } else {
             $this->error('查询不到此商家信息');

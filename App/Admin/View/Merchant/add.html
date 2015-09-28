@@ -190,6 +190,23 @@
                     </div>
                     <div class="form-group">
                       <label class="col-md-2 control-label">
+                       显示图标:
+                      </label>
+                      <div class="col-md-10">
+                          <volist name="icon_list" id="icon_vo">
+                            <label class="radio-inline">
+                              <if condition="$vo['icon'] eq $icon_vo">
+                                <input type="radio" class="uniform" name="icon" value="{$icon_vo}" checked="checked">
+                              <else />
+                                <input type="radio" class="uniform" name="icon" value="{$icon_vo}">
+                              </if>
+                              <img src="{$icon_vo|ImgReviewPath}" alt="" width="22px" height="25px">
+                            </label>
+                          </volist>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">
                        授权开始时间:
                       </label>
                       <div class="col-md-10">

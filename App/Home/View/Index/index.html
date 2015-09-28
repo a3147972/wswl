@@ -271,8 +271,9 @@ function handleSuccess(position) {
         //从服务器获取商家的点
 
         <volist name="list" id="vo">
+            var myIcon = new BMap.Icon("{$vo.icon}", new BMap.Size(50,50));
             var marker{$vo.id} = new BMap.Marker(new BMap.Point({$vo.coordinate}), {
-                icon: rIcon
+                icon: myIcon
             });
             map.addOverlay(marker{$vo.id});
             marker{$vo.id}.addEventListener("click",
@@ -290,7 +291,7 @@ function handleSuccess(position) {
                 eval("getInfo(\'{$vo.id}\')");
                 //操作结束
             });
-            var label{$vo.id} = new BMap.Label({$vo.name}, {
+            var label{$vo.id} = new BMap.Label("{$vo.name}", {
                 offset: new BMap.Size(20, -0)
             });
             label{$vo.id}.setStyle({
@@ -352,7 +353,15 @@ function getInfo(ids) {
                     html += ' ';
                     html += '<div class="title" style="text-align:center;"><font class="title_left">商家信息</font></div>';
                     html += '<div class="contentBox">';
-                    html += '<div class="picBox"><div style="float:left;width:100%;"><img src="" /></div><div style="float:left;width:30%;"></div></div>';
+                    html += '<div class="picBox">';
+                    html += '<div style="float:left;width:100%;">';
+                    if (data.img_list != '') {
+                        $.each(data.img_list, function(i,e){
+                            html += '<img src="'+e+'" style="width:100px"/>&nbsp;&nbsp;';
+                        })
+                    }
+
+                    html += '</div><div style="float:left;width:30%;"></div></div>';
                     html += '<div style="clear:both"></div>';
                     html += '<div class="line"></div>';
                     html += '商家名称:' + data.name;
@@ -361,9 +370,8 @@ function getInfo(ids) {
                     html += '<div class="line"></div>';
                     if (data.url != '') {
                         html += '商家网站：<a href="' + data.url + '" target="_blank">点击进入商家网站</a>';
+                        html += '<div class="line"></div>';
                     }
-
-                    html += '<div class="line"></div>';
                     html += '商家电话：' + data.phone;
                     html += '<div class="line"></div>';
                     html += '</div>';
