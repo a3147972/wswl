@@ -22,6 +22,8 @@ class MerchantController extends BaseController
         if (!$model->create()) {
             $this->error($model->getError());
         }
+        $model->authorization_start_time = now();
+        $model->authorization_end_time = date('Y-m-d H:i:s', strtotime('+1 month', time()));
 
         $imgData = I('post.imgData');
 
