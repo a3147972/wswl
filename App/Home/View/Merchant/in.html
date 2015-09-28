@@ -99,7 +99,8 @@ function neihe() {
    <script type="text/javascript" src="__PUBLIC__/js/imageupload.js"></script>
    <script>
     //初始化百度地图
-        var map = new BMap.Map("map");
+        var map = new BMap.Map("map",{minZoom: 4,
+        maxZoom: 18});
         map.enableScrollWheelZoom();
 
         //添加控件

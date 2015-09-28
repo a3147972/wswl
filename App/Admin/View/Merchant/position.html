@@ -17,7 +17,8 @@
     <div style="width:800px;height:400px;border:#ccc solid 1px;" id="dituContent"></div>
     <script>
         //初始化百度地图
-        var map = new BMap.Map("dituContent");
+        var map = new BMap.Map("dituContent",{minZoom: 4,
+        maxZoom: 18});
 
         map.enableScrollWheelZoom();
 
