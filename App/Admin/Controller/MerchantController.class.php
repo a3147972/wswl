@@ -123,8 +123,29 @@ class MerchantController extends BaseController
         }
     }
 
-    public function overdue()
+    public function position()
     {
+        $address = I('k');
+        $merchant_list = D('Merchant')->getMerchantList();
+        $this->assign('merchant_list', $merchant_list);
+        $this->assign('address', $address);
+        $this->display();
+    }
 
+    public function getKeywords()
+    {
+        $id = I('id');
+        $map['id'] = $id;
+
+        $info = D('MerchantClass')->_get($map);
+
+        if ($info) {
+            $keywords = $info['keywords'];
+            $keywords = explode(',', $keywords);
+            $keywords = array_filter($keywords);
+            $this->success($keywords);
+        } else {
+            $this->error('获取关键词失败');
+        }
     }
 }

@@ -23,4 +23,20 @@ class MerchantModel extends BaseModel
         array('mtime', 'now', 3, 'function'),
         array('good_number', 0, 1, 'string'),
     );
+
+    /**
+     * 查询商户列表
+     * @method getMerchantList
+     * @param  array           $map 查询条件
+     * @return array                查询出的数据
+     */
+    public function getMerchantList($map = array())
+    {
+        $map['audit_status'] = 1;
+        $map['authorization_end_time'] = array('gt', now());
+
+        $list = D('Merchant')->_list($map);
+
+        return $list;
+    }
 }

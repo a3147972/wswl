@@ -10,25 +10,9 @@ class MerchantController extends BaseController
         $class_list = D('MerchantClass')->_list();
         $this->assign('class_list', $class_list);
 
-        $merchant_list = $this->getMerchantList();
+        $merchant_list = D('Merchant')->getMerchantList();
         $this->assign('merchant_list', $merchant_list);
         $this->display();
-    }
-
-    /**
-     * 查询商户列表
-     * @method getMerchantList
-     * @param  array           $map 查询条件
-     * @return array                查询出的数据
-     */
-    public function getMerchantList($map = array())
-    {
-        $map['audit_status'] = 1;
-        $map['authorization_end_time'] = array('gt', now());
-
-        $list = D('Merchant')->_list($map);
-
-        return $list;
     }
 
     public function insert()

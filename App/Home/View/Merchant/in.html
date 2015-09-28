@@ -6,7 +6,7 @@
   <title>门店上传</title>
   <link rel="stylesheet" href="__PUBLIC__/css/in.css" />
   <script src="__PUBLIC__/js/jquery.js"></script>
-  <script src="http://api.map.baidu.com/api?v=2.0&amp;ak={:C('baidu_ak')}" type="text/javascript"></script>
+  <script src="http://api.map.baidu.com/api?v=3.0&amp;ak={:C('baidu_ak')}" type="text/javascript"></script>
  </head>
  <body>
   <script>
@@ -99,8 +99,6 @@ function neihe() {
    <script>
     //初始化百度地图
         var map = new BMap.Map("map");
-        var point = new BMap.Point(116.415911,39.909798);
-        map.centerAndZoom(point,17);
         map.enableScrollWheelZoom();
 
         //添加控件
@@ -110,35 +108,44 @@ function neihe() {
         //定位
         var geolocation = new BMap.Geolocation();
         geolocation.getCurrentPosition(function(r){
-        if(this.getStatus() == BMAP_STATUS_SUCCESS){
-            var mk = new BMap.Marker(r.point);
-                map.addOverlay(mk);
-                map.panTo(r.point);
-                $('#zb-x').val(r.point.lng);
-                $('#zb-y').val(r.point.lat);
-            } else {
-                alert('定位失败');
-            }
-        })
-        //取坐标
-        map.addEventListener("click",function(e){
-            $('#zb-x').val(e.point.lng);
-            $('#zb-y').val(e.point.lat);
+          if(this.getStatus() == BMAP_STATUS_SUCCESS){
+              var point = new BMap.Point(r.point.lng, r.point.lat);
+              map.centerAndZoom(point,17);
+              //显示商家坐标
+              <volist name="merchant_list" id="merchant_vo">
+                var point = new BMap.Point({$merchant_vo.coordinate});
+                addMarker(point);
+              </volist>
+                  $('#zb-x').val(r.point.lng);
+                  $('#zb-y').val(r.point.lat);
+          } else {
+              alert('failed'+this.getStatus());
+          }
+      })
+          var cp = map.getCenter();
+          var mk = new BMap.Marker(new BMap.Point(cp.lng,cp.lat));
+          map.removeOverlay(mk);
+          map.addOverlay(mk);
+          mk.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+
+        //添加标注点
+        function addMarker(point, icon){
+            var marker = new BMap.Marker(point);
+            map.addOverlay(marker);
+        }
+
+        //地图移动事件
+        map.addEventListener("dragend", function showInfo(){
+          var cp = map.getCenter();
+          mk.setPosition(new BMap.Point(cp.lng, cp.lat));
+          $('#zb-x').val(cp.lng);
+          $('#zb-y').val(cp.lat);
         });
 
-        function addMarker(point){
-          var marker = new BMap.Marker(point);
-          map.addOverlay(marker);
+        function del_pic(){
+            $(".main-img-del").parents('li').remove();
+            $('#main_fileInputList').show();
         }
-        addMarker(112.568482,37.921636);
-        <volist name="merchant_list" id="merchant_vo">
-          var point = new BMap.Point({$merchant_vo.coordinate});
-          addMarker(point);
-        </volist>
-    function del_pic(){
-        $(".main-img-del").parents('li').remove();
-        $('#main_fileInputList').show();
-    }
 
 //上传封面
 $("#main_fileInput").change(function(){
@@ -151,7 +158,7 @@ $("#main_fileInput").change(function(){
         $imgLi.find(".previewImg").css("background-image", "url(" + objUrl + ")").show();
         lrz(this.files[0], {
             quality:0.8,
-        // 压缩成功
+          // 压缩成功
             done: function (results) {
                   var base64 = results.base64;
                   $.ajax({

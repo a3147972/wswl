@@ -4,6 +4,7 @@ $(document).ready(function() {
         defaultDate: +7,
         showOtherMonths: true,
         autoSize: true,
+        monthNames : ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
         appendText: '<span class="help-block">(yyyy-mm-dd)</span>',
         dateFormat: "yy-mm-dd"
     });

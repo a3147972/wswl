@@ -359,7 +359,10 @@ function getInfo(ids) {
                     html += '<div class="line"></div>';
                     html += '商家地址:' + data.address;
                     html += '<div class="line"></div>';
-                    html += '商家网站：<a href="' + data.url + '" target="_blank">点击进入商家网站</a>';
+                    if (data.url != '') {
+                        html += '商家网站：<a href="' + data.url + '" target="_blank">点击进入商家网站</a>';
+                    }
+
                     html += '<div class="line"></div>';
                     html += '商家电话：' + data.phone;
                     html += '<div class="line"></div>';

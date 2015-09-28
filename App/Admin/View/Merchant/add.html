@@ -10,6 +10,9 @@
     <style>
       ul.img_list li{float: left;margin-right: 10px;}
       ul.img_list li p {text-align: center;}
+      ul.keywordsUl {margin-top: 10px;}
+      ul.keywordsUl li {float: left;margin-right: 10px;}
+      ul.keywordsUl li a {font-size: 14px;}
     </style>
   </head>
 
@@ -81,6 +84,7 @@
                       </label>
                       <div class="col-md-10">
                         <select id="input17" class="select2-select-00 col-md-12 full-width-fix" name="class_id">
+                          <option value="0">请选择商家分类</option>
                           <volist name="class_list" id="class_vo">
                           <if condition="$vo['class_id'] eq $class_vo['id']">
                             <option value="{$class_vo.id}" selected="selected">{$class_vo.name}</option>
@@ -89,6 +93,17 @@
                           </if>
                           </volist>
                         </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">
+                       商家关键字:
+                      </label>
+                      <div class="col-md-10">
+                        <input type="text" name="keywords" id="keywords" class="form-control" placeholder="请输入商家关键字" value="{$vo.keywords}">
+                        <ul class="keywordsUl">
+
+                        </ul>
                       </div>
                     </div>
                     <div class="form-group">
@@ -115,29 +130,15 @@
                         <input type="text" name="url" class="form-control" placeholder="请输入商家网址" value="{$vo.url}">
                       </div>
                     </div>
-                    <div class="form-group">
-                      <label class="col-md-2 control-label">
-                       商家关键字:
-                      </label>
-                      <div class="col-md-10">
-                        <input type="text" name="keywords" class="form-control" placeholder="请输入商家关键字" value="{$vo.keywords}">
-                      </div>
-                    </div>
+
                     <div class="form-group">
                       <label class="col-md-2 control-label">
                        商家地址:
                       </label>
                       <div class="col-md-10">
-                        <input type="text" name="address" class="form-control" placeholder="请输入商家地址" value="{$vo.address}">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="col-md-2 control-label">
-                       商家坐标:
-                      </label>
-                      <div class="col-md-10">
                         <div class="input-group">
-                          <input type="text" name="coordinate" class="form-control" placeholder="请输入商家坐标" value="{$vo.coordinate}" id="coordinate">
+                          <input type="text" name="address" class="form-control" placeholder="请输入商家地址" id="address" value="{$vo.address}">
+                          <input type="hidden" name="coordinate" class="form-control" placeholder="请输入商家坐标" value="{$vo.coordinate}" id="coordinate">
                           <span class="input-group-btn">
                             <button class="btn btn-default positionBtn" type="button">
                               定位
@@ -228,14 +229,61 @@
     <script>
     $(function(){
       $('.positionBtn').click(function(){
+        var k = $('#address').val();
+        if (k) {
+          var url = "{:U('position')}" + '?k='+k;
+        } else {
+          var url = "{:U('position')}";
+        }
         var d = dialog({
             title: 'LBS定位',
-            url : "{:U('position')}",
+            url : url,
             id : 'lbs',
         });
         d.showModal();
       })
+
+      $('[name=class_id]').change(function(){
+        var id = $(this).val();
+        $.ajax({
+          url : "{:U('Merchant/getKeywords')}",
+          data : {
+            id : id,
+          },
+          type : 'post',
+          dataType : 'json',
+          success : function(i) {
+            if (i.status == 1) {
+              var data = i.info;
+              var html = '';
+              $.each(data, function(i,e){
+                html+='<li><a href="" onclick="return getKeywords(this)">'+e+'</a></li>';
+              })
+              $('.keywordsUl').html(html);
+            }else {
+                alert(i.info);
+            }
+          }
+        })
+      })
     })
+
+    function getKeywords(dom)
+      {
+        var keywordsText = $('#keywords');
+        var keywordsVal = keywordsText.val();
+        var val = $(dom).html();
+
+        if (keywordsVal.indexOf(val) == -1) {
+          var newVal = keywordsVal + ' ' + val;
+        } else {
+          var newVal = keywordsVal.replace($.trim(val), '');
+          var newVal = newVal.replace(/(^\s*)/g, '');
+        }
+        keywordsText.val(newVal);
+        return false;
+      }
+
     function delMerchantImg(dom,info, url, title){
         if (title == '') {
             title = '发生错误了';

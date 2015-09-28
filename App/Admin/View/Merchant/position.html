@@ -11,43 +11,102 @@
 </head>
 <body>
     <span> </span>
-    <p>当前坐标: <span id="position"></span> <input type="submit" value="确定" id="submit"></p>
+    <p>当前坐标:
+    <span id="lng"></span><span id="lat"></span>
+    <input type="submit" value="确定" id="submit"></p>
     <div style="width:800px;height:400px;border:#ccc solid 1px;" id="dituContent"></div>
     <script>
         //初始化百度地图
         var map = new BMap.Map("dituContent");
-        var point = new BMap.Point(116.415911,39.909798);
-        map.centerAndZoom(point,17);
+
         map.enableScrollWheelZoom();
 
         //添加控件
         map.addControl(new BMap.ScaleControl());
         map.addControl(new BMap.NavigationControl());
+        <if condition="!empty($address)">
+            var myGeo = new BMap.Geocoder();
+            // 将地址解析结果显示在地图上,并调整地图视野
+            myGeo.getPoint("{$address}", function(point){
+                if (point) {
+                    $('#lng').html(point.lng);
+                    $('#lat').html(point.lat);
+                    map.centerAndZoom(point, 16);
+                } else {
+                    var geolocation = new BMap.Geolocation();
+                    geolocation.getCurrentPosition(function(r){
+                    if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                        var point = new BMap.Point(116.415911,39.909798);
+                            map.centerAndZoom(point,17);
+                            map.panTo(r.point);
+                            $('#lng').html(r.point.lng);
+                            $('#lat').html(r.point.lat);
+                        } else {
+                            alert('定位失败');
+                        }
+                    })
+                }
+            },"{$address}");
+        <else />
+            var geolocation = new BMap.Geolocation();
+            geolocation.getCurrentPosition(function(r){
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                var point = new BMap.Point(116.415911,39.909798);
+                    map.centerAndZoom(point,17);
+                    map.panTo(r.point);
+                    $('#lng').html(r.point.lng);
+                    $('#lat').html(r.point.lat);
+                } else {
+                    alert('定位失败');
+                }
+            })
+        </if>
+        //显示商家坐标
+        <volist name="merchant_list" id="merchant_vo">
+          var point = new BMap.Point({$merchant_vo.coordinate});
+          addMarker(point);
+        </volist>
 
-        //定位
-        var geolocation = new BMap.Geolocation();
-        geolocation.getCurrentPosition(function(r){
-        if(this.getStatus() == BMAP_STATUS_SUCCESS){
-            var mk = new BMap.Marker(r.point);
-                map.addOverlay(mk);
-                map.panTo(r.point);
-                $('#position').html(r.point.lng + "," + r.point.lat);
-            } else {
-                alert('定位失败');
-            }
-        })
-        //取坐标
-        map.addEventListener("click",function(e){
-            $('#position').html(e.point.lng + "," + e.point.lat);
+        //添加标注点
+        function addMarker(point, icon){
+            var marker = new BMap.Marker(point);
+            map.addOverlay(marker);
+        }
+
+        var cp = map.getCenter();
+          var mk = new BMap.Marker(new BMap.Point(cp.lng,cp.lat));
+          map.removeOverlay(mk);
+          map.addOverlay(mk);
+          mk.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+
+        //地图移动事件
+        map.addEventListener("dragend", function showInfo(){
+          var cp = map.getCenter();
+          mk.setPosition(new BMap.Point(cp.lng, cp.lat));
+          $('#position').html(cp.lng+","+cp.lat);
+          $('#lng').html(cp.lng);
+          $('#lat').html(cp.lat);
+          map.addOverlay(mk);
+          mk.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
         });
+
         $('#submit').click(function(){
-            var val = $('#position').html();
+            var val =$('#lng').html() + ',' + $('#lat').html();
             if (val == '') {
                 alert('请选择坐标');
                 return false;
             }
-            $('#coordinate', window.parent.document).val(val);
-            $('.ui-dialog-close', window.parent.document).trigger('click');
+            var geoc = new BMap.Geocoder();
+            var pt = new BMap.Point($('#lng').html(),$('#lat').html());
+
+            geoc.getLocation(pt, function(rs){
+                var addComp = rs.addressComponents;
+                console.log(addComp);
+                address = addComp.province  + addComp.city  + addComp.district  + addComp.street + addComp.streetNumber;
+                $('#coordinate', window.parent.document).val(val);
+                $('#address', window.parent.document).val(address);
+                $('.ui-dialog-close', window.parent.document).trigger('click');
+            })
         })
     </script>
 </body>
