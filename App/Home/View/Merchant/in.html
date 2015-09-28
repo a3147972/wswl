@@ -59,7 +59,7 @@ function neihe() {
     <p><label>商家网站</label><input value="" name="url" /></p>
     <div class="line"></div>
     <p><label>商户分类</label>
-    <select name="class_id" style="width:180px;height:30px;">
+    <select name="class_id" style="width:180px;height:30px;" id="class_id">
         <volist name="class_list" id="class_vo">
             <option value="{$class_vo.id}">{$class_vo.name}</option>
         </volist>
@@ -227,6 +227,7 @@ function getObjectURL(file) {
 
     var imgData = $('#img_data').val();
     var class_id = $('#class_id').val();
+
     $.ajax({
         url : url,
         data : {
