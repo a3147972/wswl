@@ -210,7 +210,8 @@ function getObjectURL(file) {
     var phone = $("input[name=phone]").val();
     var keywords = $("input[name=keywords]").val();
     var address = $("input[name=address]").val();
-    var coordinate = $('#zb-x').val() + ',' + $('#zb-y');
+    var coordinate = $('#zb-x').val() + ',' + $('#zb-y').val();
+
     var imgData = $('#img_data').val();
     var class_id = $('#class_id').val();
     $.ajax({
