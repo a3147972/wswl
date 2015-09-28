@@ -47,9 +47,55 @@
             <div class="col-md-12">
               <div class="widget box">
                 <div class="widget-header">
-                  <h4>商户列表</h4>
+                  <h4>有效商户列表</h4>
                 </div>
                 <div class="widget-content">
+                  <table class="table table-hover table-striped table-bordered table-highlight-head">
+                    <thead>
+                      <tr>
+                        <th>
+                          ID
+                        </th>
+                        <th>
+                          商户名称
+                        </th>
+                        <th>
+                          联系人
+                        </th>
+                        <th>联系电话</th>
+                        <th>坐标</th>
+                        <th>地址</th>
+                        <th>授权开始时间</th>
+                        <th>授权结束时间</th>
+                        <th>点赞数</th>
+                        <th>
+                          申请时间
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <volist name="merchant_list" id="vo">
+                        <tr>
+                        <td>
+                          {$vo.id}
+                        </td>
+                        <td>
+                          {$vo.name}
+                        </td>
+                        <td>{$vo.contact}</td>
+                        <td>{$vo.phone}</td>
+                        <td>{$vo.coordinate}</td>
+                        <td>{$vo.address}</td>
+                        <td>{$vo.authorization_start_time}</td>
+                        <td>{$vo.authorization_end_time}</td>
+                        <td>{$vo.good_number}</td>
+                        <td>
+                          {$vo.ctime}
+                        </td>
+                      </tr>
+                      </volist>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
