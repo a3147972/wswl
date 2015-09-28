@@ -10,9 +10,13 @@ class IndexController extends BaseController
     {
         //关键词搜索
         $k = I('post.k', '');
-
+        $class_id = I('class_id', '');
         if (!empty($k)) {
             $map['keywords'] = array('like', '%'.$k.'%');
+        }
+
+        if (!empty($class_id)) {
+            $map['class_id'] = $class_id;
         }
 
         $list = D('Merchant')->getMerchantList($map);
@@ -22,7 +26,7 @@ class IndexController extends BaseController
         $map['audit_status'] = 1;
         $map['authorization_end_time'] = array('gt', now());
 
-        $merchant_count = D('Merchant')->where($count_map)->group('class_id')->field('class_id,count(id) as count')->select();
+        $merchant_count = D('Merchant')->where($map)->group('class_id')->field('class_id,count(id) as count')->select();
 
         $merchant_count = array_column($merchant_count, 'count', 'class_id');
 

@@ -35,7 +35,7 @@ class MerchantModel extends BaseModel
         $map['audit_status'] = 1;
         $map['authorization_end_time'] = array('gt', now());
 
-        $list = D('Merchant')->_list($map);
+        $list = $this->_list($map);
 
         return $list;
     }
