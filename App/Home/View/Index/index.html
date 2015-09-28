@@ -226,7 +226,7 @@ function handleSuccess(position) {
         }
         map.addControl(new BMap.NavigationControl(opts));
         map.addControl(new BMap.ScaleControl());
-        map.centerAndZoom(point, 17);
+        map.centerAndZoom(point, 19);
 
         /*
         定位当前位置
@@ -406,7 +406,7 @@ function blackT(){
         geolocation.getCurrentPosition(function(r){
           if(this.getStatus() == BMAP_STATUS_SUCCESS){
               var point = new BMap.Point(r.point.lng, r.point.lat);
-              map.centerAndZoom(point,17);
+              map.centerAndZoom(point,19);
           } else {
               alert('failed'+this.getStatus());
           }

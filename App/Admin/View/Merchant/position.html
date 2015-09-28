@@ -31,13 +31,13 @@
                 if (point) {
                     $('#lng').html(point.lng);
                     $('#lat').html(point.lat);
-                    map.centerAndZoom(point, 16);
+                    map.centerAndZoom(point, 19);
                 } else {
                     var geolocation = new BMap.Geolocation();
                     geolocation.getCurrentPosition(function(r){
                     if(this.getStatus() == BMAP_STATUS_SUCCESS){
                         var point = new BMap.Point(116.415911,39.909798);
-                            map.centerAndZoom(point,17);
+                            map.centerAndZoom(point,19);
                             map.panTo(r.point);
                             $('#lng').html(r.point.lng);
                             $('#lat').html(r.point.lat);
@@ -52,7 +52,7 @@
             geolocation.getCurrentPosition(function(r){
             if(this.getStatus() == BMAP_STATUS_SUCCESS){
                 var point = new BMap.Point(116.415911,39.909798);
-                    map.centerAndZoom(point,17);
+                    map.centerAndZoom(point,19);
                     map.panTo(r.point);
                     $('#lng').html(r.point.lng);
                     $('#lat').html(r.point.lat);
