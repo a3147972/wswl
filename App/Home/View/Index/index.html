@@ -140,6 +140,38 @@
     $('#suggestId').dblclick(function() {
         $('.searchBox').hide();
     });
+
+    $('#suggestId').focus(function(){
+      $('.allShop').trigger('click');
+    })
+    $('#suggestId').keyup(function(){
+      var k = $(this).val();
+
+      $.ajax({
+        url : "{:U('Index/getClass')}",
+        data : {
+          k : k,
+        },
+        type : 'post',
+        dataType : 'json',
+        success:function (i) {
+          var html = '';
+          if (i.status == 1) {
+            var data = i.info;
+            $.each(data, function(i,e) {
+              html+='<li><a href="{:U(\'Index/index\')}&class_id='+e.id+'">'+e.name;
+              html += '<div class="sums">'+e.count+'</div></a>';
+              html+='</li>';
+              $('ul.m-list').html(html);
+            })
+          } else {
+              html += '未查到相关数据';
+              $('ul.m-list').html(html);
+          }
+        }
+      })
+    })
+
     $('#ser').click(function() {
         $('.searchBox').toggle();
     });
@@ -149,7 +181,6 @@
     $('#moreClose').click(function() {
         $('.moreBox').toggle();
     });
-
 });
 
 //初始化百度地图
