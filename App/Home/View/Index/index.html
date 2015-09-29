@@ -246,9 +246,9 @@ function getInfo(ids) {
                     html += '<div style="clear:both"></div>';
                     html += '<div class="line"></div>';
                     if (data.is_good == 1) {
-                      html += '商家名称:' + data.name + '&nbsp;&nbsp;<a href="javascript:void(0);" style="color:#000">(♡已赞)</a>';
+                      html += '商家名称:' + data.name + '&nbsp;&nbsp;<span style="float:right;"><a href="javascript:void(0);" style="color:#000"><img src="__PUBLIC__/img/good.png" alt="" style="width: 23px;vertical-align: bottom;"/>已赞</a></span>';
                     } else {
-                      html += '商家名称:' + data.name + '&nbsp;&nbsp;<a href="{:U("Index/good")}&merchant_id='+data.id+'" onclick="return good(this);" style="color:#000">(♡赞)</a>';
+                      html += '商家名称:' + data.name + '&nbsp;&nbsp;<span style="float:right;"><a href="{:U("Index/good")}&merchant_id='+data.id+'" onclick="return good(this);" style="color:#000"><img src="__PUBLIC__/img/good.png" alt="" style="width: 23px;vertical-align: bottom;"/>赞</a></span>';
                     }
 
                     html += '<div class="line"></div>';
