@@ -151,189 +151,76 @@
 
 });
 
-if (window.navigator.geolocation) {
-    var options = {
-        enableHighAccuracy: true,
-    };
-    window.navigator.geolocation.getCurrentPosition(handleSuccess, handleError, options);
-} else {
-    alert("浏览器不支持html5来获取地理位置信息");
-}
+//初始化百度地图
+        var map = new BMap.Map("container",{minZoom: 4,
+        maxZoom: 18});
+        map.enableScrollWheelZoom();
 
-function handleSuccess(position) {
-    var opts = {
-        anchor: BMAP_ANCHOR_BOTTOM_RIGHT
-    }
-    var lng = position.coords.longitude;
-    var lat = position.coords.latitude;
-    var map = new BMap.Map("container", {
-        minZoom: 4,
-        maxZoom: 18
-    });
+        //添加控件
+        map.addControl(new BMap.NavigationControl());
 
-    window.map = map;
-    var ggPoint = new BMap.Point(lng, lat);
+        //定位
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function(r){
+          if(this.getStatus() == BMAP_STATUS_SUCCESS){
+              var point = new BMap.Point(r.point.lng, r.point.lat);
+              map.centerAndZoom(point,18);
 
-    var myIcon = new BMap.Icon("__PUBLIC__/img/i.png", new BMap.Size(23, 25), {
-        offset: new BMap.Size(10, 15),
-
-        imageOffset: new BMap.Size(0, 0)
-    });
-
-    var rIcon1 = new BMap.Icon("__PUBLIC__/img/icon/11.png", new BMap.Size(23, 25), {
-        offset: new BMap.Size(10, 15),
-        imageOffset: new BMap.Size(0, 0)
-    });
-
-    var rIcon2 = new BMap.Icon("__PUBLIC__/img/icon/12.png", new BMap.Size(23, 25), {
-        offset: new BMap.Size(10, 15),
-        imageOffset: new BMap.Size(0, 0)
-    });
-    var rIcon3 = new BMap.Icon("__PUBLIC__/img/icon/13.png", new BMap.Size(23, 25), {
-        offset: new BMap.Size(10, 15),
-        imageOffset: new BMap.Size(0, 0)
-    });
-    var rIcon4 = new BMap.Icon("__PUBLIC__/img/icon/14.png", new BMap.Size(23, 25), {
-        offset: new BMap.Size(10, 15),
-        imageOffset: new BMap.Size(0, 0)
-    });
-    var rIcon5 = new BMap.Icon("__PUBLIC__/img/icon/15.png", new BMap.Size(23, 25), {
-        offset: new BMap.Size(10, 15),
-        imageOffset: new BMap.Size(0, 0)
-    });
-
-    var rIcon = new BMap.Icon("__PUBLIC__/img/red.png", new BMap.Size(23, 25), {
-        offset: new BMap.Size(10, 15),
-        imageOffset: new BMap.Size(0, 0)
-    });
-
-    BMap.Convertor.translate(ggPoint, pointType,
-        function(point) {
-            var style = [{
-                "featureType": "poi",
-                "elementType": "all",
-                "stylers": {
-                    "visibility": "off"
-                }
-            }]
-
-        map.setMapStyle({
-            styleJson: style
-        });
-
-        map.addControl(new BMap.ScaleControl());
-        map.centerAndZoom(point, 18);
-
-        /*
-        定位当前位置
-        */
-        var marker = new BMap.Marker(point, {
-            icon: myIcon
-        });
-        map.addOverlay(marker);
-        marker.enableDragging();
-        var geoc = new BMap.Geocoder();
-
-        /*
-        为当前位置点击添加监听
-        */
-        marker.addEventListener("click",
-        function(e) {
-            var center = map.getCenter();
-            if (docs.css('display') == 'none') {
-                $('.contents').html('信息正在加载中...');
-                var p = e.target;
-                var pt = p.getPosition();
-                geoc.getLocation(pt,
-                function(rs) {
-                    var addComp = rs.addressComponents;
-                    var htmlcontent = addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber;
-                    var htmli = myHtml(htmlcontent);
-                    $('.contents').html(htmli);
-                });
-
-                docs.css({
-                    'display': 'inline'
-                });
-            } else {
-                docs.css({
-                    'display': 'none'
-                });
-            }
-            //操作结束
-        });
-
-        var docs = $('.window_b');
-        //从服务器获取商家的点
-
-        <volist name="list" id="vo">
-            var myIcon = new BMap.Icon("{$vo.icon}", new BMap.Size(50,50));
-            var marker{$vo.id} = new BMap.Marker(new BMap.Point({$vo.coordinate}), {
-                icon: myIcon
-            });
-            map.addOverlay(marker{$vo.id});
-            marker{$vo.id}.addEventListener("click",
-            function() {
-                if (docs.css('display') == 'none') {
-                    $('.contents').html('信息正在加载中...');
-                    docs.css({
-                        'display': 'inline'
+              var docs = $('.window_b');
+              //显示商家坐标
+              <volist name="list" id="vo">
+                var point = new BMap.Point({$vo.coordinate});
+                <if condition="!empty($vo['icon'])">
+                    var myIcon = new BMap.Icon("{$vo.icon}", new BMap.Size(50,50));
+                    var marker{$vo.id} = new BMap.Marker(point,{icon:myIcon});
+                <else />
+                    var marker{$vo.id} = new BMap.Marker(point);
+                </if>
+                map.addOverlay(marker{$vo.id});
+                marker{$vo.id}.addEventListener("click",
+                    function() {
+                        if (docs.css('display') == 'none') {
+                            $('.contents').html('信息正在加载中...');
+                            docs.css({
+                                'display': 'inline'
+                            });
+                        } else {
+                            docs.css({
+                                'display': 'none'
+                            });
+                        }
+                        eval("getInfo(\'{$vo.id}\')");
+                        //操作结束
                     });
-                } else {
-                    docs.css({
-                        'display': 'none'
+                    var label{$vo.id} = new BMap.Label("{$vo.name}", {
+                        offset: new BMap.Size(20, -0)
                     });
-                }
-                eval("getInfo(\'{$vo.id}\')");
-                //操作结束
-            });
-            var label{$vo.id} = new BMap.Label("{$vo.name}", {
-                offset: new BMap.Size(20, -0)
-            });
-            label{$vo.id}.setStyle({
-                color: "#222",
-                fontSize: "12px",
-                height: "20px",
-                lineHeight: "20px",
-                fontFamily: "微软雅黑",
-                borderStyle: "solid",
-                borderColor: '#fff',
-                textAlign: 'center',
-                borderSize: '0px',
-                padding: '0',
-                margin: '0',
-                width: 'auto'
-            });
-            marker{$vo.id}.setLabel(label{$vo.id});
-        </volist>
+                    label{$vo.id}.setStyle({
+                        color: "#660",
+                        fontSize: "16px",
+                        'font-weight' : 'bolder',
+                        height: "30px",
+                        lineHeight: "20px",
+                        fontFamily: "微软雅黑",
+                        border : '0px',
+                        borderStyle: "solid",
+                        borderColor: '#fff',
+                        textAlign: 'center',
+                        borderSize: '0px',
+                        padding: '0',
+                        margin: '0',
+                        'margin-left' : '5px',
+                        width: 'auto',
+                        lineHeight : '30px',
+                        'background' : 'none',
+                    });
+                marker{$vo.id}.setLabel(label{$vo.id});
+              </volist>
+          } else {
+              alert('failed'+this.getStatus());
+          }
+        })
 
-        var cvars = '涿州市';
-        function myFun2(result) {
-            var cityName = result.name;
-            cvars = cityName;
-        }
-        var myCity = new BMap.LocalCity();
-        myCity.get(myFun2);
-
-        //返回中心的
-        var btn = document.getElementById("backMy");
-        //addEventListener：绑定函数
-        btn.addEventListener("click",
-        function() {
-            map.panTo(point)
-        });
-    });
-
-    var opts = {
-        type: BMAP_NAVIGATION_CONTROL_LARGE
-    }
-    map.addControl(new BMap.NavigationControl(opts));
-    map.addControl(new BMap.ScaleControl({
-        anchor: BMAP_ANCHOR_BOTTOM_LEFT
-    }));
-
-    map.disable3DBuilding();
-}
 function getInfo(ids) {
     $.ajax({
         url : "{:U('Index/getInfo')}",
@@ -379,23 +266,6 @@ function getInfo(ids) {
     });
 }
 
-function myHtml(a) {
-    var str = '<div class="title" style="text-align:center"><font class="title_left" style="text-align:center;margin:0px;">我的位置信息</font></div>' + '<div class="contentBox">' + a + '<div class="line"></div>' + '</div>';
-    return str;
-}
-
-function handleError(error) {
-    var map = new BMap.Map("container");
-    var point = new BMap.Point(116.331398, 39.897445);
-    map.centerAndZoom(point, 16);
-    function myFun(result) {
-        var cityName = result.name;
-        map.setCenter(cityName);
-
-    }
-    var myCity = new BMap.LocalCity();
-    myCity.get(myFun);
-}
 //返回我的位置
 function blackT(){
     var geolocation = new BMap.Geolocation();
