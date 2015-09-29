@@ -103,8 +103,12 @@ function neihe() {
         maxZoom: 18});
         map.enableScrollWheelZoom();
 
-        //添加控件
-        map.addControl(new BMap.NavigationControl());
+        map.addEventListener('load', function(){
+          map.addControl(new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT}));
+          map.addControl(new BMap.NavigationControl());
+           //添加控件
+          map.enableScrollWheelZoom();
+        })
 
         //定位
         var geolocation = new BMap.Geolocation();

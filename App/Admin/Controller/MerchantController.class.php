@@ -17,6 +17,11 @@ class MerchantController extends BaseController
         if (I('get.overdue') == 1) {
             $map['authorization_end_time'] = array('lt', now());
         }
+
+        if (empty($map)) {
+            $map['audit_status'] = 1;
+            $map['authorization_end_time'] = array('gt', now());
+        }
         return $map;
     }
     public function _before_add()

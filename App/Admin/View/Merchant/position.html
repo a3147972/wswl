@@ -20,7 +20,12 @@
         var map = new BMap.Map("dituContent",{minZoom: 4,
         maxZoom: 18});
 
-        map.enableScrollWheelZoom();
+        map.addEventListener('load', function(){
+          map.addControl(new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT}));
+          map.addControl(new BMap.NavigationControl());
+           //添加控件
+          map.enableScrollWheelZoom();
+        })
 
         //添加控件
         map.addControl(new BMap.ScaleControl());
@@ -33,6 +38,23 @@
                     $('#lng').html(point.lng);
                     $('#lat').html(point.lat);
                     map.centerAndZoom(point, 18);
+
+                    var cp = map.getCenter();
+                    var mk = new BMap.Marker(new BMap.Point(cp.lng,cp.lat));
+                    map.removeOverlay(mk);
+                    map.addOverlay(mk);
+                    mk.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+
+                    //地图移动事件
+                    map.addEventListener("dragend", function showInfo(){
+                      var cp = map.getCenter();
+                      mk.setPosition(new BMap.Point(cp.lng, cp.lat));
+                      $('#position').html(cp.lng+","+cp.lat);
+                      $('#lng').html(cp.lng);
+                      $('#lat').html(cp.lat);
+                      map.addOverlay(mk);
+                      mk.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                    })
                 } else {
                     var geolocation = new BMap.Geolocation();
                     geolocation.getCurrentPosition(function(r){
@@ -46,6 +68,23 @@
                             alert('定位失败');
                         }
                     })
+
+                    var cp = map.getCenter();
+                    var mk = new BMap.Marker(new BMap.Point(cp.lng,cp.lat));
+                    map.removeOverlay(mk);
+                    map.addOverlay(mk);
+                    mk.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+
+                    //地图移动事件
+                    map.addEventListener("dragend", function showInfo(){
+                      var cp = map.getCenter();
+                      mk.setPosition(new BMap.Point(cp.lng, cp.lat));
+                      $('#position').html(cp.lng+","+cp.lat);
+                      $('#lng').html(cp.lng);
+                      $('#lat').html(cp.lat);
+                      map.addOverlay(mk);
+                      mk.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                    })
                 }
             },"{$address}");
         <else />
@@ -57,6 +96,23 @@
                     map.panTo(r.point);
                     $('#lng').html(r.point.lng);
                     $('#lat').html(r.point.lat);
+
+                    var cp = map.getCenter();
+                    var mk = new BMap.Marker(new BMap.Point(cp.lng,cp.lat));
+                    map.removeOverlay(mk);
+                    map.addOverlay(mk);
+                    mk.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+
+                    //地图移动事件
+                    map.addEventListener("dragend", function showInfo(){
+                      var cp = map.getCenter();
+                      mk.setPosition(new BMap.Point(cp.lng, cp.lat));
+                      $('#position').html(cp.lng+","+cp.lat);
+                      $('#lng').html(cp.lng);
+                      $('#lat').html(cp.lat);
+                      map.addOverlay(mk);
+                      mk.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                    });
                 } else {
                     alert('定位失败');
                 }
@@ -65,31 +121,19 @@
         //显示商家坐标
         <volist name="merchant_list" id="merchant_vo">
           var point = new BMap.Point({$merchant_vo.coordinate});
-          addMarker(point);
+          <if condition="!empty($vo['icon'])">
+                var myIcon = new BMap.Icon("{$vo.icon|ImgReviewPath}", new BMap.Size(15,15));
+            <else />
+                var myIcon = new BMap.Icon("{:ImgReviewPath('./Static/img/icon/1.png')}", new BMap.Size(16,16));
+            </if>
+          addMarker(point, myIcon);
         </volist>
 
         //添加标注点
         function addMarker(point, icon){
-            var marker = new BMap.Marker(point);
+            var marker = new BMap.Marker(point,{icon:icon});
             map.addOverlay(marker);
         }
-
-        var cp = map.getCenter();
-          var mk = new BMap.Marker(new BMap.Point(cp.lng,cp.lat));
-          map.removeOverlay(mk);
-          map.addOverlay(mk);
-          mk.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
-
-        //地图移动事件
-        map.addEventListener("dragend", function showInfo(){
-          var cp = map.getCenter();
-          mk.setPosition(new BMap.Point(cp.lng, cp.lat));
-          $('#position').html(cp.lng+","+cp.lat);
-          $('#lng').html(cp.lng);
-          $('#lat').html(cp.lat);
-          map.addOverlay(mk);
-          mk.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
-        });
 
         $('#submit').click(function(){
             var val =$('#lng').html() + ',' + $('#lat').html();
