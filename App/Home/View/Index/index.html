@@ -197,23 +197,19 @@
                         offset: new BMap.Size(20, -0)
                     });
                     label{$vo.id}.setStyle({
-                        color: "#660",
-                        fontSize: "16px",
-                        'font-weight' : 'bolder',
-                        height: "30px",
-                        lineHeight: "20px",
-                        fontFamily: "微软雅黑",
-                        border : '0px',
-                        borderStyle: "solid",
-                        borderColor: '#fff',
-                        textAlign: 'center',
-                        borderSize: '0px',
-                        padding: '0',
-                        margin: '0',
-                        'margin-left' : '5px',
-                        width: 'auto',
-                        lineHeight : '30px',
-                        'background' : 'none',
+                        color:'#666',
+                        'background' : '#fff',
+                        '-webkit-box-shadow' : '2px 2px 2px #909090',
+                        '-moz-box-shadow' : '2px 2px 2px #909090',
+                        'box-shadow' : '2px 2px 10px #909090',
+                        'border-radius' : '2px',
+                        '-webkit-border-radius' : '2px',
+                        'border' : 'none',
+                        'height' : '30px',
+                        'line-height' : '30px',
+                        'text-align' : 'center',
+                        'font-size' : '12px',
+                        'margin' : '-40px 0 0 -55px'
                     });
                 marker{$vo.id}.setLabel(label{$vo.id});
               </volist>
