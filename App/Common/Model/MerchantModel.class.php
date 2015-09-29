@@ -11,7 +11,6 @@ class MerchantModel extends BaseModel
         array('name', 'require', '请输入商户名称'),
         array('contact', 'require', '请输入联系方式'),
         array('phone', 'require', '请输入电话号码'),
-        array('keywords', 'require', '请输入商户关键字'),
         array('address', 'require', '请输入商户地址'),
         array('coordinate', 'require', '请选择商户坐标'),
         array('authorization_start_time', 'require', '请选择授权开始时间'),
