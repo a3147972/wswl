@@ -50,9 +50,50 @@ class IndexController extends BaseController
             $img_list = D('MerchantImg')->_list(array('merchant_id'=>$id));
             $img_list = array_column($img_list, 'path');
             $info['img_list'] = $img_list;
+            //判断是否点赞
+            $good_map['merchant_id'] = $id;
+            $good_map['ip'] = get_client_ip();
+            $good_info = D('Good')->_get($good_map);
+
+            if ($good_info) {
+                $info['is_good'] = 1;
+            } else {
+                $info['is_good'] = 0;
+            }
+
             $this->success($info);
         } else {
             $this->error('查询不到此商家信息');
+        }
+    }
+
+    public function good()
+    {
+        $merchant_id = I('merchant_id');
+        $ip = get_client_ip();
+
+        $map['merchant_id'] = $merchant_id;
+        $map['ip'] = $ip;
+
+        $good_info = D('Good')->_get($map);
+
+        if ($good_info) {
+            $this->error('你已经点过赞了');
+        }
+        $model = D('Merchant');
+        $data['good_number'] = array('exp', 'good_number + 1');
+
+        $model->startTrans();
+        $add_good_result = D('Good')->insert($merchant_id);
+
+        $result = $model->where(array('id'=>$merchant_id))->save($data);
+
+        if ($add_good_result !== false && $result !== false) {
+            $model->commit();
+            $this->success('success');
+        } else {
+            $model->rollback();
+            $this->error('error');
         }
     }
 }

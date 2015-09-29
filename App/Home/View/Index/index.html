@@ -182,7 +182,7 @@
                 <if condition="!empty($vo['icon'])">
                     var myIcon = new BMap.Icon("{$vo.icon}", new BMap.Size(15,15));
                 <else />
-                    var myIcon = new BMap.Icon("__PUBLIC__/img/icon/1.png", new BMap.Size(15,15));
+                    var myIcon = new BMap.Icon("__PUBLIC__/img/icon/1.png", new BMap.Size(16,16));
                 </if>
                 var marker{$vo.id} = new BMap.Marker(point,{icon:myIcon});
                 map.addOverlay(marker{$vo.id});
@@ -210,7 +210,8 @@
                         'background' : 'none',
                         'font-family' : '微软雅黑',
                         'letter-spacing' : '1px',
-                        'margin-left' : '5px',
+                        'margin-left' : '2px',
+                        'margin-top' : '1px',
                     });
                 marker{$vo.id}.setLabel(label{$vo.id});
               </volist>
@@ -229,7 +230,6 @@ function getInfo(ids) {
         success: function(i) {
             if (i.status == 1) {
                 var data = i.info;
-                console.log(data);
                 var html = '';
                     html += ' ';
                     html += '<div class="title" style="text-align:center;"><font class="title_left">商家信息</font></div>';
@@ -245,7 +245,12 @@ function getInfo(ids) {
                     html += '</div><div style="float:left;width:30%;"></div></div>';
                     html += '<div style="clear:both"></div>';
                     html += '<div class="line"></div>';
-                    html += '商家名称:' + data.name;
+                    if (data.is_good == 1) {
+                      html += '商家名称:' + data.name + '&nbsp;&nbsp;<a href="javascript:void(0);" style="color:#000">(♡已赞)</a>';
+                    } else {
+                      html += '商家名称:' + data.name + '&nbsp;&nbsp;<a href="{:U("Index/good")}&merchant_id='+data.id+'" onclick="return good(this);" style="color:#000">(♡赞)</a>';
+                    }
+
                     html += '<div class="line"></div>';
                     html += '商家地址:' + data.address;
                     html += '<div class="line"></div>';
@@ -275,6 +280,23 @@ function blackT(){
               alert('failed'+this.getStatus());
           }
       })
+}
+
+function good(dom){
+  var url = $(dom).attr('href');
+  alert(url);
+  $.ajax({
+    url : url,
+    dataType : 'json',
+    success : function (i) {
+      if (i.status == 1) {
+        $(dom).html('(♡已赞)');
+      } else {
+        alert('您已经点过了');
+      }
+    }
+  })
+  return false;
 }
 
 $(function() {
