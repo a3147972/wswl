@@ -157,6 +157,17 @@
         maxZoom: 18});
 
         map.addEventListener('load', function(){
+          var style = [{
+                "featureType": "poi",
+                "elementType": "all",
+                "stylers": {
+                "visibility": "off"
+                }
+                  }]
+
+          map.setMapStyle({
+            styleJson:style
+          });
           map.addControl(new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT}));
           map.addControl(new BMap.NavigationControl());
            //添加控件

@@ -110,6 +110,17 @@ function neihe() {
           map.addControl(new BMap.NavigationControl());
            //添加控件
           map.enableScrollWheelZoom();
+          var style = [{
+                "featureType": "poi",
+                "elementType": "all",
+                "stylers": {
+                "visibility": "off"
+                }
+                  }]
+
+          map.setMapStyle({
+            styleJson:style
+          });
         })
 
         //定位
@@ -119,14 +130,17 @@ function neihe() {
               var point = new BMap.Point(r.point.lng, r.point.lat);
               map.centerAndZoom(point,18);
               //显示商家坐标
-              <volist name="merchant_list" id="merchant_vo">
-                var point = new BMap.Point({$merchant_vo.coordinate});
+              <volist name="merchant_list" id="vo">
+                var point = new BMap.Point({$vo.coordinate});
                 <if condition="!empty($vo['icon'])">
                     var myIcon = new BMap.Icon("{$vo.icon}", new BMap.Size(15,15));
                 <else />
                     var myIcon = new BMap.Icon("__PUBLIC__/img/icon/1.png", new BMap.Size(16,16));
                 </if>
-                addMarker(point, myIcon);
+                var label = new BMap.Label("{$vo.name}", {
+                        offset: new BMap.Size(20, -0)
+                    });
+                addMarker(point, myIcon,label);
               </volist>
               //添加中心点坐标
               var cp = map.getCenter();
@@ -163,9 +177,19 @@ function neihe() {
         })
 
         //添加标注点
-        function addMarker(point, icon){
+        function addMarker(point, icon,label){
             var marker = new BMap.Marker(point, {icon:icon});
+            label.setStyle({
+                        color:'#333',
+                        border : 'none',
+                        'background' : 'none',
+                        'font-family' : '微软雅黑',
+                        'letter-spacing' : '1px',
+                        'margin-left' : '2px',
+                        'margin-top' : '1px',
+            });
             map.addOverlay(marker);
+            marker.setLabel(label);
         }
 
         function del_pic(){
