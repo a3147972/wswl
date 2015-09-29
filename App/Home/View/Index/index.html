@@ -155,10 +155,13 @@
 //初始化百度地图
         var map = new BMap.Map("container",{minZoom: 4,
         maxZoom: 18});
-        map.enableScrollWheelZoom();
 
-        //添加控件
-        map.addControl(new BMap.NavigationControl());
+        map.addEventListener('load', function(){
+          map.addControl(new BMap.ScaleControl());
+          map.addControl(new BMap.NavigationControl());
+           //添加控件
+          map.enableScrollWheelZoom();
+        })
 
         //定位
         var geolocation = new BMap.Geolocation();
@@ -166,17 +169,22 @@
           if(this.getStatus() == BMAP_STATUS_SUCCESS){
               var point = new BMap.Point(r.point.lng, r.point.lat);
               map.centerAndZoom(point,18);
+              //定位当前位置
+              var myIcon = new BMap.Icon("./Static/img/i.png", new BMap.Size(23, 25), {offset: new BMap.Size(10, 15)});
+              var marker = new BMap.Marker(point,{icon: myIcon});
+              map.addOverlay(marker);
+              marker.enableDragging();
 
               var docs = $('.window_b');
               //显示商家坐标
               <volist name="list" id="vo">
                 var point = new BMap.Point({$vo.coordinate});
                 <if condition="!empty($vo['icon'])">
-                    var myIcon = new BMap.Icon("{$vo.icon}", new BMap.Size(50,50));
-                    var marker{$vo.id} = new BMap.Marker(point,{icon:myIcon});
+                    var myIcon = new BMap.Icon("{$vo.icon}", new BMap.Size(15,15));
                 <else />
-                    var marker{$vo.id} = new BMap.Marker(point);
+                    var myIcon = new BMap.Icon("__PUBLIC__/img/icon/1.png", new BMap.Size(15,15));
                 </if>
+                var marker{$vo.id} = new BMap.Marker(point,{icon:myIcon});
                 map.addOverlay(marker{$vo.id});
                 marker{$vo.id}.addEventListener("click",
                     function() {
@@ -197,19 +205,12 @@
                         offset: new BMap.Size(20, -0)
                     });
                     label{$vo.id}.setStyle({
-                        color:'#666',
-                        'background' : '#fff',
-                        '-webkit-box-shadow' : '2px 2px 2px #909090',
-                        '-moz-box-shadow' : '2px 2px 2px #909090',
-                        'box-shadow' : '2px 2px 10px #909090',
-                        'border-radius' : '2px',
-                        '-webkit-border-radius' : '2px',
-                        'border' : 'none',
-                        'height' : '30px',
-                        'line-height' : '30px',
-                        'text-align' : 'center',
-                        'font-size' : '12px',
-                        'margin' : '-40px 0 0 -55px'
+                        color:'#333',
+                        border : 'none',
+                        'background' : 'none',
+                        'font-family' : '微软雅黑',
+                        'letter-spacing' : '1px',
+                        'margin-left' : '5px',
                     });
                 marker{$vo.id}.setLabel(label{$vo.id});
               </volist>

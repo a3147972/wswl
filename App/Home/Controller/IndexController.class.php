@@ -9,10 +9,10 @@ class IndexController extends BaseController
     public function index()
     {
         //关键词搜索
-        $k = I('post.k', '');
+        $k = I('k', '');
         $class_id = I('class_id', '');
         if (!empty($k)) {
-            $map['keywords'] = array('like', '%'.$k.'%');
+            $map['keywords|name'] = array('like', '%'.$k.'%');
         }
 
         if (!empty($class_id)) {
