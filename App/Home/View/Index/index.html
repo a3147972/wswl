@@ -157,7 +157,7 @@
         maxZoom: 18});
 
         map.addEventListener('load', function(){
-          map.addControl(new BMap.ScaleControl());
+          map.addControl(new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT}));
           map.addControl(new BMap.NavigationControl());
            //添加控件
           map.enableScrollWheelZoom();
@@ -290,7 +290,7 @@ function good(dom){
     dataType : 'json',
     success : function (i) {
       if (i.status == 1) {
-        $(dom).html('(♡已赞)');
+        $(dom).html('<img src="__PUBLIC__/img/good.png" alt="" style="width: 23px;vertical-align: bottom;"/>已赞');
       } else {
         alert('您已经点过了');
       }
