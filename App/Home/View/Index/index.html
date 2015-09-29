@@ -221,10 +221,6 @@ function handleSuccess(position) {
             styleJson: style
         });
 
-        var opts = {
-            type: BMAP_NAVIGATION_CONTROL_LARGE
-        }
-        map.addControl(new BMap.NavigationControl(opts));
         map.addControl(new BMap.ScaleControl());
         map.centerAndZoom(point, 18);
 
