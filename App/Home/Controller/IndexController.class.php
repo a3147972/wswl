@@ -135,11 +135,10 @@ class IndexController extends BaseController
 
             $merchant_class_id_list = array_unique($merchant_class_id_list);
 
-            $class_id_list = array_merge($class_id_list, $merchant_class_id_list);
-
             $class_map['class_id'] = array('in', $class_id_list);
 
             $class_list = D('Merchant')->_list($class_map, '', 'good_number desc');
+            $class_list = array_merge($class_list, $merchant_list);
         }
 
         if ($class_list) {
