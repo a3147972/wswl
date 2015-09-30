@@ -146,7 +146,7 @@
     })
     $('#suggestId').keyup(function(){
       var k = $(this).val();
-
+      var menu_html = $('ul.m-list').html();
       $.ajax({
         url : "{:U('Index/getClass')}",
         data : {
@@ -160,10 +160,10 @@
             var data = i.info;
             $.each(data, function(i,e) {
               html+='<li><a href="{:U(\'Index/index\')}&class_id='+e.id+'">'+e.name;
-              html += '<div class="sums">'+e.count+'</div></a>';
+              html += '<div class="sums">'+e.good_number+'</div></a>';
               html+='</li>';
-              $('ul.m-list').html(html);
             })
+            $('ul.m-list').html(html);
           } else {
               html += '未查到相关数据';
               $('ul.m-list').html(html);
@@ -289,9 +289,9 @@ function getInfo(ids) {
                     html += '<div style="clear:both"></div>';
                     html += '<div class="line"></div>';
                     if (data.is_good == 1) {
-                      html += '商家名称：' + data.name + '&nbsp;&nbsp;<span style="float:right;"><a href="javascript:void(0);" style="color:#000"><img src="__PUBLIC__/img/good.png" alt="" style="width: 23px;vertical-align: bottom;"/>已赞</a></span>';
+                      html += '商家名称：' + data.name + '&nbsp;&nbsp;<span style="float:right;"><a href="javascript:void(0);" style="color:#000"><img src="__PUBLIC__/img/good.png" alt="" style="width: 23px;vertical-align: bottom;"/>已赞</a><span class="good_number_span">('+data.good_number+')</span></span>';
                     } else {
-                      html += '商家名称：' + data.name + '&nbsp;&nbsp;<span style="float:right;"><a href="{:U("Index/good")}&merchant_id='+data.id+'" onclick="return good(this);" style="color:#000"><img src="__PUBLIC__/img/good.png" alt="" style="width: 23px;vertical-align: bottom;"/>赞</a></span>';
+                      html += '商家名称：' + data.name + '&nbsp;&nbsp;<span style="float:right;"><a href="{:U("Index/good")}&merchant_id='+data.id+'" onclick="return good(this);" style="color:#000"><img src="__PUBLIC__/img/good.png" alt="" style="width: 23px;vertical-align: bottom;"/>赞</a><span class="good_number_span">('+data.good_number+')</span></span>';
                     }
 
                     html += '<div class="line"></div>';
@@ -327,13 +327,14 @@ function blackT(){
 
 function good(dom){
   var url = $(dom).attr('href');
-
+  var span = $(dom).siblings('span.good_number_span');
   $.ajax({
     url : url,
     dataType : 'json',
     success : function (i) {
       if (i.status == 1) {
         $(dom).html('<img src="__PUBLIC__/img/good.png" alt="" style="width: 23px;vertical-align: bottom;"/>已赞');
+        span.html('('+i.info+')');
       } else {
         alert('您已经点过了');
       }
