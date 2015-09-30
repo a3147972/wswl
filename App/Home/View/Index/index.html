@@ -247,12 +247,14 @@
                         offset: new BMap.Size(20, -0)
                     });
                     label{$vo.id}.setStyle({
-                        color:'#333',
+                        color:'#74916a',
+                        'font-weight' : 'bold',
                         border : 'none',
                         'background' : 'none',
                         'font-family' : '微软雅黑',
-                        'margin-left' : '-1px',
-                        'margin-top' : '1px',
+                        'margin-left' : '-3px',
+                        'margin-top' : '2px',
+                        'text-shadow' : '1px 0 #fff, 0 1px #fff,0 -1px #fff, -1px 0 #fff'
                     });
                 marker{$vo.id}.setLabel(label{$vo.id});
               </volist>

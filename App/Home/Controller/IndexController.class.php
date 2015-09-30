@@ -124,13 +124,15 @@ class IndexController extends BaseController
             $merchant_map['name'] = array('like', '%'.$k.'%');
             $merchant_list = D('Merchant')->_list($merchant_map);
             $merchant_class_id_list = array_column($merchant_list, 'class_id');
+
             $merchant_class_id_list = array_unique($merchant_class_id_list);
 
             $class_id_list = array_merge($class_id_list, $merchant_class_id_list);
 
             $class_map['id'] = array('in', $class_id_list);
 
-            $class_list = D('MerchantClass')->_list($map);
+            $class_list = D('MerchantClass')->_list($class_map);
+
         } else {
             $class_list = D('MerchantClass')->_list();
         }
