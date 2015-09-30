@@ -22,6 +22,10 @@ class MerchantController extends BaseController
         if (I('get.overdue') == 1) {
             $map['authorization_end_time'] = array('lt', now());
         }
+        $name = I('get.name');
+        if ($name) {
+            $map['name'] = array('like', '%'.$name.'%');
+        }
 
         if (empty($map)) {
             $map['audit_status'] = 1;

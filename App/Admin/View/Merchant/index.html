@@ -45,11 +45,25 @@
             <div class="col-md-12">
               <div class="btn-toolbar btn-toolbar-demo">
                 <a href="{:U('add')}" class="btn btn-lg btn-primary">新增</a>
+                <form class="form-horizontal row-border ajaxForm" action="{:U('index')}" method="get">
+                    <div class="form-group">
+                      <div class="col-md-5">
+                        <div class="input-group">
+                          <input type="text" name="name" class="form-control">
+                          <div class="input-group-btn">
+                              <input type="submit" value="搜索" class="btn btn-default" style="margin-top:0">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
               </div>
               <div class="widget box">
+
                 <div class="widget-header">
                   <h4>商户列表</h4>
                 </div>
+
                 <div class="widget-content">
                   <table class="table table-hover table-striped table-bordered table-highlight-head">
                     <thead>
