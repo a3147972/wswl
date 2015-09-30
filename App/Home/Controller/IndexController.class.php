@@ -6,6 +6,10 @@ use Home\Controller\BaseController;
 
 class IndexController extends BaseController
 {
+    /**
+     * 网站首页
+     * @method index
+     */
     public function index()
     {
         //关键词搜索
@@ -39,6 +43,10 @@ class IndexController extends BaseController
         $this->display();
     }
 
+    /**
+     * 获取单个商户信息
+     * @method getInfo
+     */
     public function getInfo()
     {
         $id = I('id');
@@ -67,6 +75,10 @@ class IndexController extends BaseController
         }
     }
 
+    /**
+     * 点赞
+     * @method good
+     */
     public function good()
     {
         $merchant_id = I('merchant_id');
@@ -96,7 +108,10 @@ class IndexController extends BaseController
             $this->error('error');
         }
     }
-
+    /**
+     * 获取分类列表
+     * @method getClass
+     */
     public function getClass()
     {
         $k = I('post.k');

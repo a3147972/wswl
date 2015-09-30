@@ -6,6 +6,10 @@ use Admin\Controller\BaseController;
 class MerchantImgController extends BaseController
 {
 
+    /**
+     * 删除商户关键词
+     * @method del
+     */
     public function del()
     {
         $model = D('MerchantImg');

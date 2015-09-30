@@ -5,6 +5,11 @@ use Admin\Controller\BaseController;
 
 class MerchantController extends BaseController
 {
+    /**
+     * 商户条件过滤
+     * @method _filter
+     * @return [type]  [description]
+     */
     public function _filter()
     {
         $map = array();
@@ -81,6 +86,10 @@ class MerchantController extends BaseController
         }
     }
 
+    /**
+     * 更新商户信息
+     * @method update
+     */
     public function update()
     {
         $model = D('Merchant');
@@ -113,6 +122,10 @@ class MerchantController extends BaseController
         }
     }
 
+    /**
+     * 商户审核
+     * @method audit_status
+     */
     public function audit_status()
     {
         $id = I('get.id');
@@ -130,6 +143,10 @@ class MerchantController extends BaseController
         }
     }
 
+    /**
+     * 商户位置信息
+     * @method position
+     */
     public function position()
     {
         $address = I('k');
@@ -139,6 +156,11 @@ class MerchantController extends BaseController
         $this->display();
     }
 
+    /**
+     * 获取商户关键词
+     * @method getKeywords
+     * @return [type]      [description]
+     */
     public function getKeywords()
     {
         $id = I('id');

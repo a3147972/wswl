@@ -5,7 +5,10 @@ use Think\Controller;
 
 class PublicController extends Controller
 {
-    //手机上传图片
+    /**
+     * 上传图片
+     * @method upload
+     */
     public function upload()
     {
         $base64 = I('post.base64', '');

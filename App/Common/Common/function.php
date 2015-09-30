@@ -4,7 +4,11 @@ function now()
 {
     return date('Y-m-d H:i:s', time());
 }
-
+/**
+ * 上传图片路径格式化
+ * @method ImgReviewPath
+ * @param  原始路径        $path 图片实际路径
+ */
 function ImgReviewPath($path)
 {
     $root = __ROOT__;

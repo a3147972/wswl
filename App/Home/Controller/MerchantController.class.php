@@ -5,6 +5,11 @@ use Home\Controller\BaseController;
 
 class MerchantController extends BaseController
 {
+    /**
+     * 商户入驻
+     * @method in
+     * @return [type] [description]
+     */
     public function in()
     {
         $class_list = D('MerchantClass')->_list();
@@ -15,6 +20,10 @@ class MerchantController extends BaseController
         $this->display();
     }
 
+    /**
+     * 商户提交入驻申请
+     * @method insert
+     */
     public function insert()
     {
         $model = D('Merchant');

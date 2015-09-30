@@ -7,6 +7,12 @@ class GoodModel extends BaseModel
 {
     protected $tableName = 'good';
 
+    /**
+     * 点赞写入数据表
+     * @method insert
+     * @param  int $merchant_id 商户id
+     * @return bool             成功返回true,失败返回false
+     */
     public function insert($merchant_id)
     {
         $data['ip'] = get_client_ip();

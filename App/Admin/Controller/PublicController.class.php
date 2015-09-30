@@ -6,6 +6,10 @@ use Think\Controller;
 
 class PublicController extends Controller
 {
+    /**
+     * 多图上传方法
+     * @method webuploader
+     */
     public function webuploader()
     {
         $size = 3145728;
@@ -27,6 +31,14 @@ class PublicController extends Controller
         die(json_encode($ajaxInfo));
     }
 
+    /**
+     * 上传私有方法
+     * @method upload
+     * @param  string  $path 上传目录
+     * @param  integer $size 文件大小
+     * @param  array   $exts 允许格式
+     * @return array         成功返回数据,失败返回false
+     */
     private function upload($path = './Uploads/', $size = 3145728, $exts = array('jpg', 'gif', 'png', 'jpeg'))
     {
         $upload = new Upload();

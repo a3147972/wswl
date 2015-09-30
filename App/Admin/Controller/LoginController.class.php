@@ -22,7 +22,10 @@ class LoginController extends Controller
     {
         $this->display();
     }
-
+    /**
+     * 检测登录
+     * @method checkLogin
+     */
     public function checkLogin()
     {
         if (!IS_POST) {
@@ -49,7 +52,11 @@ class LoginController extends Controller
             $this->error(D('Admin')->getError());
         }
     }
-
+    /**
+     * 退出
+     * @method logout
+     * @return [type] [description]
+     */
     public function logout()
     {
         session(null);

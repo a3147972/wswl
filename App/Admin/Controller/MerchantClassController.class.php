@@ -5,6 +5,10 @@ use Admin\Controller\BaseController;
 
 class MerchantClassController extends BaseController
 {
+    /**
+     * 防止删除有商户的分类
+     * @method _before_del
+     */
     public function _before_del()
     {
         $id = I('get.id');
