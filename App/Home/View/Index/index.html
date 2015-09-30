@@ -309,7 +309,7 @@ function getInfo(ids) {
                         html += '商家网站：<a href="' + data.url + '" target="_blank">点击进入商家网站</a>';
                         html += '<div class="line"></div>';
                     }
-                    html += '商家电话：' + data.phone;
+                    html += '商家电话：<a href="tel:' + data.phone + '">'+data.phone+'</a>';
                     html += '<div class="line"></div>';
                     html += '</div>';
                 $('.contents').html(html);
