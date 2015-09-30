@@ -88,8 +88,6 @@ function neihe() {
      <p><label>门店坐标</label>
      <input value="" name="zb-x" style="width:50px;" type="hidden"/>&nbsp;
      <input value="" name="zb-y" style="width:50px;" type="hidden"/>
-     <input value="" id="zb-x" style="width:50px;" type="text" readonly="readonly"/>&nbsp;
-     <input value="" id="zb-y" style="width:50px;" type="text" readonly="readonly"/>
      <font style="color:red">&nbsp;(*通常不需要修改)</font></p>
      <div class="line"></div>
     </div>
@@ -129,6 +127,13 @@ function neihe() {
           if(this.getStatus() == BMAP_STATUS_SUCCESS){
               var point = new BMap.Point(r.point.lng, r.point.lat);
               map.centerAndZoom(point,18);
+              //地址解析
+              var geoc = new BMap.Geocoder();
+              geoc.getLocation(point, function(rs){
+                var addComp = rs.addressComponents;
+                $('#address').val(addComp.city + addComp.district  + addComp.street  + addComp.streetNumber);
+                $('[name=address]').val(addComp.city + addComp.district  + addComp.street  + addComp.streetNumber);
+              })
               //显示商家坐标
               <volist name="merchant_list" id="vo">
                 var point = new BMap.Point({$vo.coordinate});
