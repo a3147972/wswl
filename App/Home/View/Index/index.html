@@ -216,13 +216,14 @@
                 var point = new BMap.Point({$coordinate});
               <else />
                 var point = new BMap.Point(r.point.lng, r.point.lat);
+                //定位当前位置
+                var myIcon = new BMap.Icon("./Static/img/i.png", new BMap.Size(23, 25), {offset: new BMap.Size(10, 15)});
+                var marker = new BMap.Marker(point,{icon: myIcon});
+                map.addOverlay(marker);
+                marker.enableDragging();
               </if>
               map.centerAndZoom(point,18);
-              //定位当前位置
-              var myIcon = new BMap.Icon("./Static/img/i.png", new BMap.Size(23, 25), {offset: new BMap.Size(10, 15)});
-              var marker = new BMap.Marker(point,{icon: myIcon});
-              map.addOverlay(marker);
-              marker.enableDragging();
+
 
               var docs = $('.window_b');
               //显示商家坐标

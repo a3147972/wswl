@@ -20,7 +20,6 @@ class MerchantModel extends BaseModel
     protected $_auto = array(
         array('ctime', 'now', 1, 'function'),
         array('mtime', 'now', 3, 'function'),
-        array('good_number', 0, 1, 'string'),
     );
 
     /**
