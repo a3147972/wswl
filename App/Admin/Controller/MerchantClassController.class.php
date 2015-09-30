@@ -15,7 +15,7 @@ class MerchantClassController extends BaseController
 
         //查询值
         $pk = $model->getPk();
-        $order = empty($order) ? $pk . ' asc' : $order;
+        $order = empty($order) ? 'sort asc' : $order;
         $map = method_exists($this, '_filter') ? $this->_filter() : array();
 
         //查询数据
