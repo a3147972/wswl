@@ -163,7 +163,7 @@
             var data = i.info;
             $.each(data, function(i,e) {
               html+='<li><a href="{:U(\'Index/index\')}&merchant_id='+e.id+'">'+e.name;
-              html += '<div class="sums">'+e.good_number+'</div></a>';
+              html += '<div class="sums" style="background:none;"><span><img src="__PUBLIC__/img/good.png" alt="" style="width: 23px;vertical-align: bottom;"/>('+e.good_number+')</span></div></a>';
               html+='</li>';
             })
             $('ul.m-list').html(html);
