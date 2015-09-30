@@ -116,12 +116,16 @@
   <script>
   $(function() {
     var j = 0;
+    var menu_html = $('ul.m-list').html();
+
     $('.allShop').click(function() {
         $('.moreShop').slideToggle();
         if (j == 0) {
-            $(this).html('<font style="color:#333333"><b>全部</b></font> <img src="__PUBLIC__/img/UP.png" class="allicon"/>');
+          $('ul.m-list').html(menu_html);
+          $(this).html('<font style="color:#333333"><b>全部</b></font> <img src="__PUBLIC__/img/UP.png" class="allicon"/>');
             j = 1;
         } else {
+          $('ul.m-list').html(menu_html);
             $(this).html('<font style="color:#333333"><b>全部</b></font> <img src="__PUBLIC__/img/DOWN.png" class="allicon"/>');
             j = 0;
         }
@@ -146,7 +150,6 @@
     })
     $('#suggestId').keyup(function(){
       var k = $(this).val();
-      var menu_html = $('ul.m-list').html();
       $.ajax({
         url : "{:U('Index/getClass')}",
         data : {

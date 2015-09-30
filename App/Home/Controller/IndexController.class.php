@@ -118,12 +118,25 @@ class IndexController extends BaseController
         $k = I('post.k');
 
         if ($k) {
-            $map['name|keywords'] = array('like', '%'.$k.'%');
-            $list = D('Merchant')->_list($map, '', 'good_number desc');
+            $map['keywords'] = array('like', '%'.$k.'%');
+            $class_list = D('MerchantClass')->_list($map);
+            $class_id_list = array_column($class_list, 'id');
+
+            $merchant_map['name'] = array('like', '%'.$k.'%');
+            $merchant_list = D('Merchant')->_list($merchant_map);
+            $merchant_class_id_list = array_column($merchant_list, 'class_id');
+
+            $merchant_class_id_list = array_unique($merchant_class_id_list);
+
+            $class_id_list = array_merge($class_id_list, $merchant_class_id_list);
+
+            $class_map['class_id'] = array('in', $class_id_list);
+
+            $class_list = D('Merchant')->_list($class_map, '', 'good_number desc');
         }
 
-        if ($list) {
-            $this->success($list);
+        if ($class_list) {
+            $this->success($class_list);
         } else {
             $this->error('没有此数据');
         }
