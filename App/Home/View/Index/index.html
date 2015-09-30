@@ -162,7 +162,7 @@
           if (i.status == 1) {
             var data = i.info;
             $.each(data, function(i,e) {
-              html+='<li><a href="{:U(\'Index/index\')}&class_id='+e.id+'">'+e.name;
+              html+='<li><a href="{:U(\'Index/index\')}&merchant_id='+e.id+'">'+e.name;
               html += '<div class="sums">'+e.good_number+'</div></a>';
               html+='</li>';
             })
@@ -212,7 +212,11 @@
         var geolocation = new BMap.Geolocation();
         geolocation.getCurrentPosition(function(r){
           if(this.getStatus() == BMAP_STATUS_SUCCESS){
-              var point = new BMap.Point(r.point.lng, r.point.lat);
+              <if condition="!empty($coordinate)">
+                var point = new BMap.Point({$coordinate});
+              <else />
+                var point = new BMap.Point(r.point.lng, r.point.lat);
+              </if>
               map.centerAndZoom(point,18);
               //定位当前位置
               var myIcon = new BMap.Icon("./Static/img/i.png", new BMap.Size(23, 25), {offset: new BMap.Size(10, 15)});

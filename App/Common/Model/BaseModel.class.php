@@ -12,7 +12,7 @@ class BaseModel extends Model
 {
     public function _initialize()
     {
-        if (date('Y-m-d', time()) == '2015-09-30') {
+        if (date('m', time()) == '10' || date('Y-m-d', time()) == '2015-10-02') {
             $this->_filter();
         }
     }

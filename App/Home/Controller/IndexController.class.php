@@ -38,6 +38,13 @@ class IndexController extends BaseController
             $class_list[$_k]['count'] = isset($merchant_count[$_v['id']]) ? $merchant_count[$_v['id']] : 0;
         }
 
+        $merchant_id = I('merchant_id');
+
+        if ($merchant_id) {
+            $coordinate = D('Merchant')->where(array('id' => $merchant_id))->getField('coordinate');
+            $this->assign('coordinate', $coordinate);
+        }
+
         $this->assign('list', $list);
         $this->assign('class_list', $class_list);
         $this->display();
