@@ -38,7 +38,7 @@ class MerchantClassController extends BaseController
     {
         $id = I('get.id');
 
-        $map['merchant_id'] = $id;
+        $map['id'] = $id;
 
         $info = D('Merchant')->_get($map);
 

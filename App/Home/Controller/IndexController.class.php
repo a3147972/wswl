@@ -25,7 +25,7 @@ class IndexController extends BaseController
 
         $list = D('Merchant')->getMerchantList($map);
 
-        $class_list = D('MerchantClass')->_list();
+        $class_list = D('MerchantClass')->_list(array(), '', 'sort asc');
         //查询分类下数量
         $map['audit_status'] = 1;
         $map['authorization_end_time'] = array('gt', now());
@@ -139,6 +139,9 @@ class IndexController extends BaseController
 
             $class_list = D('Merchant')->_list($class_map, '', 'good_number desc');
             $class_list = array_merge($class_list, $merchant_list);
+            $good_number = array_column($class_list, 'good_number');
+
+            array_multisort($good_number, SORT_DESC, $class_list);
         }
 
         if ($class_list) {

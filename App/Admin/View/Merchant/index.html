@@ -139,13 +139,13 @@
                             <case value="list">
                               <eq name="page_vo.status" value="disabled">
                                 <li class="disabled">
-                                  <a href="{:U($page_vo['url'])}">
+                                  <a href="{$page_vo['url']}">
                                     {$page_vo.page}
                                   </a>
                                 </li>
                               <else />
                                 <li>
-                                  <a href="{:U($page_vo['url'])}">
+                                  <a href="{$page_vo['url']}">
                                     {$page_vo.page}
                                   </a>
                                 </li>
@@ -154,13 +154,13 @@
                             <case value="next">
                               <eq name="page_vo.status" value="disabled">
                                 <li class="disabled">
-                                  <a href="{:U($page_vo['url'])}">
+                                  <a href="{$page_vo['url']}">
                                     Next →
                                   </a>
                                 </li>
                               <else />
                                 <li>
-                                  <a href="{:U($page_vo['url'])}">
+                                  <a href="{$page_vo['url']}">
                                     Next →
                                   </a>
                                 </li>
