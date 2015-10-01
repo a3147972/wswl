@@ -95,12 +95,12 @@
   <div class="moreShop" style="display:none;">
    <div class="view">
     <ul class="m-list">
-    <li><a href="{:U('index')}">全部商家<div class="sums">
+    <li><a href="{:U('index')}">全部商家<div class="sums" style="width:20px;text-align:center">
          {$count}
         </div></a></li>
      <volist name="class_list" id="class_vo">
       <li><a href="{:U('index', array('class_id' => $class_vo['id']))}">{$class_vo['name']}
-        <div class="sums">
+        <div class="sums" style="width:20px;text-align:center">
          {$class_vo.count}
         </div></a></li>
      </volist>

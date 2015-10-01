@@ -184,13 +184,14 @@ function neihe() {
         function addMarker(point, icon,label){
             var marker = new BMap.Marker(point, {icon:icon});
             label.setStyle({
-                        color:'#333',
+                        color:'#74916a',
+                        'font-weight' : 'bold',
                         border : 'none',
                         'background' : 'none',
                         'font-family' : '微软雅黑',
-                        'letter-spacing' : '1px',
                         'margin-left' : '-3px',
-                        'margin-top' : '1px',
+                        'margin-top' : '-1px',
+                        'text-shadow' : '1px 0 #fff, 0 1px #fff,0 -1px #fff, -1px 0 #fff'
             });
             map.addOverlay(marker);
             marker.setLabel(label);

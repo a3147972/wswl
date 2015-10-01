@@ -45,7 +45,10 @@ class IndexController extends BaseController
             $this->assign('coordinate', $coordinate);
         }
         //获取总数
-        $count = D('Merchant')->_count($map);
+        $count_map['audit_status'] = 1;
+        $count_map['authorization_end_time'] = array('gt', now());
+        $count = D('Merchant')->_count($count_map);
+
         $this->assign('count', $count);
         $this->assign('list', $list);
         $this->assign('class_list', $class_list);
