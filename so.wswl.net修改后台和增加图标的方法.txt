@@ -1,0 +1,18 @@
+修改后台方法:
+文件：App/Common\Conf\config.php
+内容:
+<?php
+return array(
+    'LOAD_EXT_CONFIG' => 'db,site',
+    'URL_MODULE_MAP' => array(
+        'test' =>'admin',
+    ),
+);
+把test修改成别的名称即可，其他不用动,必须小写，不支持大写
+
+增加地图图标方法：
+图标位置：
+Static/img/icon，整个文件夹的图标都在,把新做的图标扔进去,文件名不能用中文
+然后在
+App/Admin/Conf/config.php文件里
+有一个ICON_LIST的项,按照规律一直写下去就成
