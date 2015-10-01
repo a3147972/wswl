@@ -330,6 +330,10 @@ function blackT(){
           if(this.getStatus() == BMAP_STATUS_SUCCESS){
               var point = new BMap.Point(r.point.lng, r.point.lat);
               map.centerAndZoom(point,18);
+                //定位当前位置
+                var myIcon = new BMap.Icon("./Static/img/i.png", new BMap.Size(23, 25), {offset: new BMap.Size(10, 15)});
+                var marker = new BMap.Marker(point,{icon: myIcon});
+                map.addOverlay(marker);
           } else {
               alert('failed'+this.getStatus());
           }
