@@ -80,7 +80,7 @@
       <td style="width:55%">
        <div class="searchBox">
         <form action="{:U('Index/index')}" method="get">
-         <input value="" name="k" id="suggestId" placeholder=" 请输入商家名称或关键词" />
+         <input value="" name="k" id="suggestId" placeholder="请输入关键词" />
          <button id="addressBtn">搜索</button>
         </form>
        </div>
@@ -95,10 +95,11 @@
   <div class="moreShop" style="display:none;">
    <div class="view">
     <ul class="m-list">
+    <li><a href="{:U('index')}">全部</a></li>
      <volist name="class_list" id="class_vo">
       <li><a href="{:U('index', array('class_id' => $class_vo['id']))}">{$class_vo['name']}
         <div class="sums">
-         {$class_vo.count}`
+         {$class_vo.count}
         </div></a></li>
      </volist>
     </ul>
@@ -261,7 +262,7 @@
                         'background' : 'none',
                         'font-family' : '微软雅黑',
                         'margin-left' : '-3px',
-                        'margin-top' : '2px',
+                        'margin-top' : '-1px',
                         'text-shadow' : '1px 0 #fff, 0 1px #fff,0 -1px #fff, -1px 0 #fff'
                     });
                 marker{$vo.id}.setLabel(label{$vo.id});
