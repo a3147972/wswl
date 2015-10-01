@@ -95,7 +95,9 @@
   <div class="moreShop" style="display:none;">
    <div class="view">
     <ul class="m-list">
-    <li><a href="{:U('index')}">全部</a></li>
+    <li><a href="{:U('index')}">全部商家<div class="sums">
+         {$count}
+        </div></a></li>
      <volist name="class_list" id="class_vo">
       <li><a href="{:U('index', array('class_id' => $class_vo['id']))}">{$class_vo['name']}
         <div class="sums">
@@ -164,7 +166,7 @@
             var data = i.info;
             $.each(data, function(i,e) {
               html+='<li><a href="{:U(\'Index/index\')}&merchant_id='+e.id+'">'+e.name;
-              html += '<div class="sums" style="background:none;"><span><img src="__PUBLIC__/img/good.png" alt="" style="width: 23px;vertical-align: bottom;"/>('+e.good_number+')</span></div></a>';
+              html += '<div class="sums" style="background:none;"><span><img src="__PUBLIC__/img/good.png" alt="" />('+e.good_number+')</span></div></a>';
               html+='</li>';
             })
             $('ul.m-list').html(html);

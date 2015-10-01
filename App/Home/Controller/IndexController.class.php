@@ -44,7 +44,9 @@ class IndexController extends BaseController
             $coordinate = D('Merchant')->where(array('id' => $merchant_id))->getField('coordinate');
             $this->assign('coordinate', $coordinate);
         }
-
+        //获取总数
+        $count = D('Merchant')->_count($map);
+        $this->assign('count', $count);
         $this->assign('list', $list);
         $this->assign('class_list', $class_list);
         $this->display();
