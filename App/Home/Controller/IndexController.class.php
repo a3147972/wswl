@@ -22,6 +22,8 @@ class IndexController extends BaseController
         if (!empty($class_id)) {
             $map['class_id'] = $class_id;
         }
+        $count_map['audit_status'] = 1;
+        $count_map['authorization_end_time'] = array('gt', now());
 
         $list = D('Merchant')->getMerchantList($map);
 
@@ -30,7 +32,7 @@ class IndexController extends BaseController
         $map['audit_status'] = 1;
         $map['authorization_end_time'] = array('gt', now());
 
-        $merchant_count = D('Merchant')->where($map)->group('class_id')->field('class_id,count(id) as count')->select();
+        $merchant_count = D('Merchant')->where($count_map)->group('class_id')->field('class_id,count(id) as count')->select();
 
         $merchant_count = array_column($merchant_count, 'count', 'class_id');
 
@@ -45,9 +47,14 @@ class IndexController extends BaseController
             $this->assign('coordinate', $coordinate);
         }
         //获取总数
-        $count_map['audit_status'] = 1;
-        $count_map['authorization_end_time'] = array('gt', now());
+
         $count = D('Merchant')->_count($count_map);
+
+        //分类名称
+        if ($class_id) {
+            $class_info = D('MerchantClass')->_get(array('id' => $class_id));
+            $this->assign('class_info', $class_info);
+        }
 
         $this->assign('count', $count);
         $this->assign('list', $list);
