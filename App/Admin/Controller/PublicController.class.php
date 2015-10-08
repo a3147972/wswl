@@ -25,7 +25,7 @@ class PublicController extends Controller
                 $new_filepath = $path.$info[$_k]['savepath'] . 's_'.$info[$_k]['savename'];
                 $image = new Image();
                 $image->open($filepath);
-                $image->crop(500,500)->save($new_filepath);
+                $image->thumb(500,500)->save($new_filepath);
                 $data[$_k]['filepath'] = $new_filepath;
             }
             $ajaxInfo['status'] = 1;
