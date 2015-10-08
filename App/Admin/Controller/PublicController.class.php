@@ -3,6 +3,7 @@ namespace Admin\Controller;
 
 use Common\Tools\Upload;
 use Think\Controller;
+use Common\Tools\Image;
 
 class PublicController extends Controller
 {
@@ -20,7 +21,12 @@ class PublicController extends Controller
         if (is_array($info)) {
             $data = array();
             foreach ($info as $_k => $_v) {
-                $data[$_k]['filepath'] = $path . $info[$_k]['savepath'] . $info[$_k]['savename'];
+                $filepath= $path . $info[$_k]['savepath'] . $info[$_k]['savename'];
+                $new_filepath = $path.$info[$_k]['savepath'] . 's_'.$info[$_k]['savename'];
+                $image = new Image();
+                $image->open($filepath);
+                $image->crop(500,500)->save($new_filepath);
+                $data[$_k]['filepath'] = $new_filepath;
             }
             $ajaxInfo['status'] = 1;
             $ajaxInfo['data'] = $data;

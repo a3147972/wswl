@@ -581,7 +581,7 @@
                     })
                     $('#imgData').val(textData);
                 } else {        //上传失败
-                    alert(i.info);
+                    alert(res.info);
                 }
             })
 
