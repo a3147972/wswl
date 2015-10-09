@@ -227,19 +227,22 @@
               </if>
               map.centerAndZoom(point,18);
 
-
               var docs = $('.window_b');
               //显示商家坐标
-              <volist name="list" id="vo">
-                var point = new BMap.Point({$vo.coordinate});
-                <if condition="!empty($vo['icon'])">
-                    var myIcon = new BMap.Icon("{$vo.icon}", new BMap.Size(15,15));
-                <else />
+              var data = eval({$list|json_encode});
+              $.each(data, function(i, e){
+                var coordinate = e.coordinate.split(",");
+                  var point = new BMap.Point(coordinate[0] , coordinate[1]);
+
+                  if (e.icon == '') {
+                    var myIcon = new BMap.Icon(e.icon, new BMap.Size(15,15));
+                  } else {
                     var myIcon = new BMap.Icon("__PUBLIC__/img/icon/1.png", new BMap.Size(16,16));
-                </if>
-                var marker{$vo.id} = new BMap.Marker(point,{icon:myIcon});
-                map.addOverlay(marker{$vo.id});
-                marker{$vo.id}.addEventListener("click",
+                  }
+                  var marker = new BMap.Marker(point,{icon:myIcon});
+                  map.addOverlay(marker);
+
+                  marker.addEventListener("click",
                     function() {
                         if (docs.css('display') == 'none') {
                             $('.contents').html('信息正在加载中...');
@@ -251,13 +254,13 @@
                                 'display': 'none'
                             });
                         }
-                        eval("getInfo(\'{$vo.id}\')");
+                        eval("getInfo(\'e.id\')");
                         //操作结束
                     });
-                    var label{$vo.id} = new BMap.Label("{$vo.name}", {
+                  var label= new BMap.Label(e.name, {
                         offset: new BMap.Size(20, -0)
                     });
-                    label{$vo.id}.setStyle({
+                  label.setStyle({
                         color:'#74916a',
                         'font-weight' : 'bold',
                         border : 'none',
@@ -267,8 +270,9 @@
                         'margin-top' : '-1px',
                         'text-shadow' : '1px 0 #fff, 0 1px #fff,0 -1px #fff, -1px 0 #fff'
                     });
-                marker{$vo.id}.setLabel(label{$vo.id});
-              </volist>
+
+                  marker.setLabel(label);
+              })
           } else {
               alert('failed'+this.getStatus());
           }

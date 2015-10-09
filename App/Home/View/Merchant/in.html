@@ -134,18 +134,20 @@ function neihe() {
                 $('[name=address]').val(addComp.city + addComp.district  + addComp.street  + addComp.streetNumber);
               })
               //显示商家坐标
-              <volist name="merchant_list" id="vo">
-                var point = new BMap.Point({$vo.coordinate});
-                <if condition="!empty($vo['icon'])">
-                    var myIcon = new BMap.Icon("{$vo.icon}", new BMap.Size(15,15));
-                <else />
+              var data = eval({$merchant_list|json_encode});
+              $.each(data, function(i, e){
+                var coordinate = e.coordinate.split(",");
+                  var point = new BMap.Point(coordinate[0] , coordinate[1]);
+
+                  if (e.icon == '') {
+                    var myIcon = new BMap.Icon(e.icon, new BMap.Size(15,15));
+                  } else {
                     var myIcon = new BMap.Icon("__PUBLIC__/img/icon/1.png", new BMap.Size(16,16));
-                </if>
-                var label = new BMap.Label("{$vo.name}", {
-                        offset: new BMap.Size(20, -0)
-                    });
-                addMarker(point, myIcon,label);
-              </volist>
+                  }
+                  var marker = new BMap.Marker(point,{icon:myIcon});
+                  map.addOverlay(marker);
+              })
+
               //添加中心点坐标
               var cp = map.getCenter();
               var mk = new BMap.Marker(new BMap.Point(cp.lng,cp.lat));
