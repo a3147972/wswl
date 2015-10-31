@@ -32,7 +32,7 @@ class MerchantModel extends BaseModel
     {
         $map['audit_status'] = 1;
         $map['authorization_end_time'] = array('gt', now());
-
+        $map['is_show'] = 1;
         $list = $this->_list($map);
 
         return $list;

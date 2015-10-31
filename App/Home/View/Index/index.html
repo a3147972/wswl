@@ -219,17 +219,18 @@
                 var point = new BMap.Point({$coordinate});
               <else />
                 var point = new BMap.Point(r.point.lng, r.point.lat);
-                //定位当前位置
+              </if>
+              //定位当前位置
                 var myIcon = new BMap.Icon("./Static/img/i.png", new BMap.Size(23, 25), {offset: new BMap.Size(10, 15)});
                 var marker = new BMap.Marker(point,{icon: myIcon});
                 map.addOverlay(marker);
                 marker.enableDragging();
-              </if>
               map.centerAndZoom(point,18);
 
               var docs = $('.window_b');
               //显示商家坐标
-              var data = eval({$list|json_encode});
+              <if condition="empty($_GET['class_id']) and empty($_GET['merchant_id'])">
+                var data = eval({$list|json_encode});
               $.each(data, function(i, e){
                 var coordinate = e.coordinate.split(",");
                   var point = new BMap.Point(coordinate[0] , coordinate[1]);
@@ -273,6 +274,8 @@
 
                   marker.setLabel(label);
               })
+              </if>
+
           } else {
               alert('failed'+this.getStatus());
           }
@@ -373,7 +376,7 @@ $(function() {
 
     </script>
   <div style="display:none">
-   <script language="javascript" type="text/javascript" src="http://js.users.51.la/18190640.js"></script>
+   <script language="javascript" type="text/javascript" src="http://js.users.51.la/18641557.js"></script>
   </div>
  </body>
 </html>

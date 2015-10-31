@@ -83,6 +83,7 @@
                         <th>授权结束时间</th>
                         <th>点赞数</th>
                         <th>状态</th>
+                        <th>显示状态</th>
                         <th>
                           申请时间
                         </th>
@@ -112,6 +113,9 @@
                           <case value="0">待审核</case>
                           <case value="-1">审核驳回</case>
                         </switch></td>
+                        <td>
+                          <eq name="vo.is_show" value="1">显示<else/>隐藏</eq>
+                        </td>
                         <td>
                           {$vo.ctime}
                         </td>
